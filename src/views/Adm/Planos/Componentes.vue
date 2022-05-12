@@ -183,7 +183,7 @@ export default {
     editedItem: {
       nome: "",
       descricao: "",
-      status: "A",
+      status: "",
       id_empresa: "",
     },
     loadingSalvar: false,

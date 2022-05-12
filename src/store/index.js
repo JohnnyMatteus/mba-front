@@ -9,6 +9,8 @@ import providers from './providers'
 import systems from './systems'
 import components from './components'
 import empresas from './empresas'
+import empreendimentos from './empreendimentos'
+import planos from './planos'
 
 Vue.use(Vuex)
 
@@ -22,6 +24,8 @@ export default new Vuex.Store({
     auth,
     module,
     empresas,
+    empreendimentos,
+    planos,
     users,
     providers,
     systems,

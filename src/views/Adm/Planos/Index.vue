@@ -8,7 +8,7 @@
       :callBackModalCancelar="fechar"
       :callBackModalSalvar="salvar"
       :callBackModalInsert="resetFields"
-      :loadingButtonSave="loadingControl.loadingSalvar"
+      :loadingButtonSave="loadingSalvar"
       :tamanhoModalCrud="600"
       searchLabelText="Pesquisar na lista"
       :searchTextField.sync="searchTextField"
@@ -20,12 +20,7 @@
             <v-menu transition="slide-y-transition" bottom>
               <template #activator="{ on, attrs }">
                 <v-btn color="primary" dark v-bind="attrs" v-on="on" large>
-                    <v-icon
-                        size="17"
-                        class="me-1"
-                    >
-                        mdi-file-cog-outline
-                    </v-icon>
+                  <v-icon size="17" class="me-1"> mdi-file-cog-outline </v-icon>
                   Configurações
                 </v-btn>
               </template>
@@ -121,7 +116,7 @@
       <template slot="contentModalCrud">
         <v-container fluid>
           <v-row wrap>
-            <v-col cols="12" md="12">
+            <v-col cols="12" sm="12" md="12"> 
               <v-text-field
                 outlined
                 label="Nome"
@@ -139,43 +134,77 @@
                 trim
               />
             </v-col>
-            <v-col cols="12">
-              <v-text-field
-                outlined
-                label="Data inicial"
-                data-vv-as="data_inicial"
-                dense
-                persistent-hint
-                v-model="objetoEdicao.data_inicial"
-                :hint="errors.first('data_inicial')"
-                :error="errors.collect('data_inicial').length ? true : false"
-                v-validate="'required'"
-                data-vv-scope="plano"
-                data-vv-validate-on="change"
-                id="data_inicial"
-                name="data_inicial"
-                trim
-              />
+            <v-col cols="12" sm="12" md="12"> 
+              <v-menu
+                ref="menuref"
+                v-model="menu2"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                max-width="290px"
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    outlined
+                    dense
+                    v-model="objetoEdicao.data_inicial"
+                    label="Data inicial"
+                    persistent-hint
+                    v-bind="attrs"
+                    v-on="on"
+                    :hint="errors.first('data_inicial')"
+                    :error="
+                      errors.collect('data_inicial').length ? true : false
+                    "
+                    v-validate="'required'"
+                    data-vv-scope="plano"
+                  ></v-text-field>
+                </template>
+
+                <v-date-picker
+                  v-model="objetoEdicao.data_inicial"
+                  no-title
+                  color="primary"
+                  @input="menu1 = false"
+                ></v-date-picker>
+              </v-menu>
             </v-col>
-            <v-col cols="12">
-              <v-text-field
-                outlined
-                label="Data final"
-                data-vv-as="data_final"
-                dense
-                persistent-hint
-                v-model="objetoEdicao.data_final"
-                :hint="errors.first('data_final')"
-                :error="errors.collect('data_final').length ? true : false"
-                v-validate="'required'"
-                data-vv-scope="plano"
-                data-vv-validate-on="change"
-                id="data_final"
-                name="data_final"
-                trim
-              />
+            <v-col cols="12" sm="12" md="12"> 
+              <v-menu
+                ref="menuref"
+                v-model="menu1"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                max-width="290px"
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    outlined
+                    dense
+                    v-model="objetoEdicao.data_final"
+                    label="Data final"
+                    persistent-hint
+                    v-bind="attrs"
+                    v-on="on"
+                    :hint="errors.first('data_final')"
+                    :error="errors.collect('data_final').length ? true : false"
+                    v-validate="'required'"
+                    data-vv-scope="plano"
+                  ></v-text-field>
+                </template>
+
+                <v-date-picker
+                  v-model="objetoEdicao.data_final"
+                  no-title
+                  color="primary"
+                  @input="menu1 = false"
+                ></v-date-picker>
+              </v-menu>
             </v-col>
-            <div class="col-12">
+            <v-col cols="12" sm="12" md="12"> 
               <v-select
                 :items="listaEmpreendimentos"
                 outlined
@@ -186,29 +215,54 @@
                 hide-details="auto"
                 data-vv-as="Empreendimentos"
                 persistent-hint
-                v-model="objetoEdicao.id_empresa"
+                v-model="objetoEdicao.empreendimento"
                 :hint="errors.first('empreendimento_id')"
-                :error="errors.collect('empreendimento_id').length ? true : false"
+                :error="
+                  errors.collect('empreendimento_id').length ? true : false
+                "
                 v-validate="'required'"
                 data-vv-scope="plano"
                 data-vv-validate-on="change"
+                return-object
                 trim
               ></v-select>
-            </div>
+            </v-col>
+            <v-col cols="12" sm="12" md="12">             
+              <v-select
+                :items="itemsStatus"
+                v-model="objetoEdicao.status"
+                :hint="errors.first('status')"
+                :error="errors.collect('status').length ? true : false"
+                v-validate="'required'"
+                data-vv-scope="plano"
+                data-vv-validate-on="change"
+                data-vv-as="status"
+                dense
+                outlined
+                persistent-hint
+                label="Status"
+              ></v-select>
+            </v-col>
           </v-row>
         </v-container>
       </template>
     </crud>
-    <modal-sistemas :visible="showFormSistemas" @close="showFormSistemas=false" ></modal-sistemas>
-    <modal-componentes :visible="showFormEquipamentos" @close="showFormEquipamentos=false" ></modal-componentes>
+    <modal-sistemas
+      :visible="showFormSistemas"
+      @close="showFormSistemas = false"
+    ></modal-sistemas>
+    <modal-componentes
+      :visible="showFormEquipamentos"
+      @close="showFormEquipamentos = false"
+    ></modal-componentes>
   </div>
 </template>
 <script>
 import logo from "@/assets/images/svg/logo.svg";
 import Crud from "@/components/Crud.vue";
 import ModalLateral from "@/components/ModalLateral.vue";
-import modalSistemas from "@/views/Adm/Planos/Sistemas.vue"
-import modalComponentes from "@/views/Adm/Planos/Componentes.vue"
+import modalSistemas from "@/views/Adm/Planos/Sistemas.vue";
+import modalComponentes from "@/views/Adm/Planos/Componentes.vue";
 import store from "@/store";
 export default {
   name: "gestao-planos",
@@ -225,15 +279,14 @@ export default {
       dialog: false,
       loadingTable: false,
       loadingControl: {
-        dataTable: false,
-        loadingSalvar: false,
+        dataTable: false
       },
       headers: [
         { text: "Nome", value: "nome", sortable: false, hide: "smAndDown" },
-        { text: "Empreendimento", value: "empreendimento"},
-        { text: "Data inicial", value: "data_inicial"},
-        { text: "Data final", value: "data_final"},
-        { text: "Status", value: "status", },
+        { text: "Empreendimento", value: "empreendimento" },
+        { text: "Data inicial", value: "data_inicial" },
+        { text: "Data final", value: "data_final" },
+        { text: "Status", value: "status" },
         { text: "Ações", value: "acao", sortable: false, align: "center" },
       ],
       headersModal: [
@@ -266,9 +319,13 @@ export default {
           value: "updated_at",
         },
       ],
-      listaItensDataTable: [],
+      itemsStatus: [
+        { text: "Ativo", value: "A" },
+        { text: "Inativo", value: "I" },
+      ],
       objetoSalvar: [],
       dialogDelete: false,
+      loadingSalvar:false,
       dialog: false,
       showFormEquipamentos: false,
       showFormSistemas: false,
@@ -280,13 +337,15 @@ export default {
       buttonAction: false,
       objetoEdicao: {
         nome: "",
-        email: "",
-        responsavel: "",
         status: "",
-        id_empresa: "",
+        id_empreendimento: "",
+        id_empresa: ""
       },
       indexEdicao: 0,
       edicao: false,
+      menu1: "",
+      menu2: "",
+      listaEmpreendimentos: [],
     };
   },
   methods: {
@@ -303,19 +362,16 @@ export default {
       this.objetoEdicao = {};
     },
     salvar() {
-      this.$validator.validate("fornecedor.*").then((result) => {
-        if (result) {
-          this.loadingExcluir = true;
+      this.$validator.validate("plano.*").then((result) => {
+        if (result) {          
           this.loadingSalvar = true;
           let url =
             this.edicao === false
-              ? "/fornecedor"
-              : "/fornecedor/" + this.objetoEdicao.id;
+              ? "/plano-manutencao"
+              : "/plano-manutencao/" + this.objetoEdicao.id;
           let method = this.edicao === false ? "POST" : "PUT";
           let text =
-            this.edicao === false
-              ? "fornecedor cadastrado."
-              : "fornecedor atualizado.";
+            this.edicao === false ? "plano cadastrado." : "plano atualizado.";
           let erro =
             this.edicao === false
               ? "Erro ao salvar item."
@@ -323,8 +379,11 @@ export default {
           let data = this.objetoEdicao;
           data._method = method;
           data.url = url;
+          data.id_empresa = this.objetoEdicao.empreendimento.id_empresa
+          data.id_empreendimento = this.objetoEdicao.empreendimento.id
+          delete data.empreendimento
           this.$store
-            .dispatch("providers/saveOrUpdate", { data })
+            .dispatch("planos/saveOrUpdate", { data })
             .then(() => {
               this.edicao === false
                 ? this.listaItens.push(this.objetoEdicao)
@@ -347,7 +406,7 @@ export default {
             })
             .finally(() => {
               this.fechar();
-            });
+            });            
         } else {
           this.$store.dispatch("module/openSnackBar", {
             color: "error",
@@ -366,7 +425,7 @@ export default {
         let item = this.item;
         this.indexEdicao = this.listaItens.indexOf(item);
         this.$store
-          .dispatch("providers/removeItem", this.item.id)
+          .dispatch("planos/removeItem", this.item.id)
           .then((response) => {
             if (response.data.data === true) {
               this.listaItens.pop(this.indexEdicao);
@@ -410,14 +469,17 @@ export default {
 
       return "PENDENTE";
     },
-    modalComponentes()
-    {
-        this.showFormEquipamentos = !this.showFormEquipamentos;
+    parseDate(dates) {
+      if (!dates) return null;
+      const [month, day, year] = dates.split("/");
+      return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
     },
-    modalSistemas()
-    {
-        this.showFormSistemas = !this.showFormSistemas;
-    }
+    modalComponentes() {
+      this.showFormEquipamentos = !this.showFormEquipamentos;
+    },
+    modalSistemas() {
+      this.showFormSistemas = !this.showFormSistemas;
+    },
   },
   computed: {
     computedHeaders() {
@@ -426,12 +488,23 @@ export default {
       );
     },
     formTitle() {
-      return this.edicao === false
-        ? "Cadastrar planos"
-        : "Editar planos";
+      return this.edicao === false ? "Cadastrar planos" : "Editar planos";
+    },
+    listaItens: {
+      get() {
+        return this.$store.getters["planos/getItemsList"];
+      },
+      set(value) {
+        this.$store.dispatch("planos/setItemList", value);
+      },
     },
   },
-  created() {},
+  created() {
+    this.$store.dispatch("planos/fetchItems");
+    this.$store.dispatch("empreendimentos/fetchIndexItems").then((response) => {
+      this.listaEmpreendimentos = response.data.data.empreendimento;
+    });
+  },
 };
 </script>
 <style lang="scss">
