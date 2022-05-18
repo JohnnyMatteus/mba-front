@@ -78,7 +78,7 @@
                           label="Status"
                         ></v-select>
                       </v-col>
-                      <div class="col-12" sm="12" md="12">
+                      <div class="col-12" sm="12" md="12" v-if="papel == 'Administrador'">
                         <v-select
                           :items="listaEmpresas"
                           dense
@@ -270,6 +270,7 @@ export default {
               : "Erro ao atualizar item.";
           let data = this.editedItem;
           data._method = method;
+          data.id_empresa =  (this.role == "Administrador") ? data.id_empresa : this.usuario.id_empresa;        
           data.url = url;
           this.$store
             .dispatch("components/saveOrUpdate", { data })
@@ -307,7 +308,6 @@ export default {
       });
     },
   },
-
   watch: {
     dialog(val) {
       val || this.close();
@@ -351,6 +351,16 @@ export default {
         this.$store.dispatch("components/setItemList", value);
       },
     },
+    usuario: {
+      get() {
+        return this.$store.getters['auth/getUsuario']
+      }
+    },
+    papel: {
+      get() {
+        return this.$store.getters['auth/getRole']
+      }
+    }
   },
 };
 </script>

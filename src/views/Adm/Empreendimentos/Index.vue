@@ -263,7 +263,7 @@
                   data-vv-as="Status"
                 ></v-select>
               </div>
-              <div class="col-12">
+              <div class="col-12" v-if="role == 'Administrador'">
                 <v-select
                   v-model="item.id_empresa"
                   :rules="[resolvedRequired]"
@@ -384,6 +384,8 @@ export default {
         store.unregisterModule(EMPREENDIMENTO_APP_STORE_MODULE_NAME);
     });
     const empresasList = computed(() => store.getters["app-empreendimentos/getEmpresasList"]);
+    const role = computed(() => store.getters['auth/getRole']);
+    const usuario = computed(() => store.getters['auth/getUsuario']);
 
     const indexEdicao = ref(false);
     const itemData = reactive({});
@@ -467,7 +469,7 @@ export default {
         formData.append('fone', item.value.fone);
         formData.append('status', item.value.status);
         formData.append('logo', item.value.logo);
-        formData.append('id_empresa', item.value.id_empresa);
+        (role.value == "Administrador") ? formData.append('id_empresa', item.value.id_empresa) : formData.append('id_empresa', usuario.value.id_empresa);        
         formData.append('description', item.value.description);
         formData.append('slug', item.value.slug);
         formData.append('endereco', item.value.endereco);
@@ -532,6 +534,7 @@ export default {
       resolveStatusVariant,
       resolveNameStatusVariant,
       resolvedRequired,
+      role,
 
       validators: { required, urlValidator, emailValidator },
 

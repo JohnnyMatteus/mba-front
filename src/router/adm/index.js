@@ -8,6 +8,8 @@ export default [
     meta: {
       layout: "content",
       requiresAuth: true,
+      resource: 'Painel',
+      action: 'administrativo',
     },
   },
   {
@@ -17,6 +19,8 @@ export default [
     meta: {
       layout: "content",
       requiresAuth: true,
+      resource: 'Usuario',
+      action: 'view',
     },
   },
   {
@@ -26,6 +30,8 @@ export default [
     meta: {
       layout: "content",
       requiresAuth: true,
+      resource: 'Roles',
+      action: 'view',
     },
   },
   {
@@ -35,7 +41,7 @@ export default [
     meta: {
       layout: "content",
       requiresAuth: true,
-      resource: 'dashboad-empresa',
+      resource: 'Permission',
       action: 'view',
     },
   },
@@ -46,6 +52,8 @@ export default [
     meta: {
       layout: "content",
       requiresAuth: true,
+      resource: 'Menu',
+      action: 'view',
     },
   },
   {
@@ -55,6 +63,8 @@ export default [
     meta: {
       layout: "content",
       requiresAuth: true,
+      resource: 'Empresa',
+      action: 'view',
     },
   },
   {
@@ -64,6 +74,8 @@ export default [
     meta: {
       layout: "content",
       requiresAuth: true,
+      resource: 'Empreendimento',
+      action: 'view',
     },
   },
   {
@@ -73,6 +85,8 @@ export default [
     meta: {
       layout: "content",
       requiresAuth: true,
+      resource: 'Fornecedores',
+      action: 'view',
     },
   },
   {
@@ -82,6 +96,19 @@ export default [
     meta: {
       layout: "content",
       requiresAuth: true,
+      resource: 'Planos',
+      action: 'view',
+    },
+  },
+  {
+    path: '/adm/planos/view/:id',
+    name: '/adm/planos/plano/view',
+    component: () => import('@/views/Adm/Planos/View/PlanoView.vue'),
+    meta: {
+      layout: 'content',
+      requiresAuth: true,
+      resource: 'Planos-visualizacao',
+      action: 'view',
     },
   },
   

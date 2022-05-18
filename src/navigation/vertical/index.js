@@ -5,38 +5,45 @@ export default [
     title: 'Home',
     icon: mdiHomeOutline,
     to: '/empresa/dashboad',
-    resource: 'dashboad-empresa',
-    action: 'read',
+    resource: 'Painel',
+    action: 'construtora',
+  },
+  {
+    title: 'Home',
+    icon: mdiHomeOutline,
+    to: '/empresa/dashboad',
+    resource: 'Painel',
+    action: 'sindico',
   },
   {
     title: 'Dashboad',
     icon: mdiHomeOutline,
     to: '/adm/dashboad-adm',
-    resource: 'Dashboard-adm',
-    action: 'view',
+    resource: 'Painel',
+    action: 'administrativo',
   },
   {
     title: 'Configurações',
     icon: mdiCogOutline,
-    resource: 'configuracao',
+    resource: 'Menu',
     action: 'view',
     children: [
       {
         title: 'Papeis',
         to: '/adm/configuracao/acl/papeis',
-        resource: 'roles',
+        resource: 'Roles',
         action: 'view',
       },
       {
         title: 'Permissões',
         to: '/adm/configuracao/acl/permissoes',
-        resource: 'permission',
+        resource: 'Permission',
         action: 'view',
       },
       {
         title: 'Menus',
         to: '/adm/configuracao/menus',
-        resource: 'menu',
+        resource: 'Menu',
         action: 'view'
       },
     ],
@@ -45,45 +52,45 @@ export default [
     title: 'Usuários',
     icon: mdiAccountMultiple,
     to: '/adm/usuarios',
-    resource: 'usuarios',
+    resource: 'Usuario',
     action: 'view'
   },
   {
     title: 'Empresas',
     icon: mdiOfficeBuildingOutline,
     to: '/adm/empresas',
-    resource: 'empresas',
+    resource: 'Empresa',
     action: 'view'
   },
   {
     title: 'Empreendimentos',
     icon: mdiOfficeBuildingMarkerOutline,
     to: '/adm/empreendimentos',
-    resource: 'empreendimentos',
+    resource: 'Empreendimento',
     action: 'view'
   },
   {
     title: 'Planos de manutenções',
     icon: mdiNotebookMultiple,
-    resource: 'planos',
+    resource: 'Planos',
     action: 'view',
     children: [
       {
         title: 'Lista',
         to: '/adm/planos/lista',
-        resource: 'planos',
+        resource: 'Planos',
         action: 'view'
       },
       {
         title: 'Fornecedores',
         to: '/adm/fornecedores',
-        resource: 'fornecedores',
+        resource: 'Fornecedores',
         action: 'view'
       },
       {
         title: 'Novo plano',
         to: 'planos-new',
-        resource: 'planos-new',
+        resource: 'Planos-new',
         action: 'view'
       }
     ],

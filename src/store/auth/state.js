@@ -2,7 +2,7 @@ export default {
 	authStatus: '',
     errorMessages: '',
 	token: localStorage.getItem('accessToken') || false,
-	user: localStorage.getItem('user') || [],
+	user: JSON.parse(localStorage.getItem('user')) || [],
 	tableList: [],
 	notifications: [],
 	currentTime: new Date().toLocaleString(),

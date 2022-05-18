@@ -147,7 +147,7 @@
                 trim
               />
             </v-col>
-            <div class="col-12">
+            <div class="col-12" v-if="papel == 'Administrador'">
               <v-select
                 :items="listaEmpresas"
                 outlined
@@ -302,10 +302,11 @@ export default {
           let text =
             this.edicao === false ? "fornecedor cadastrado." : "fornecedor atualizado.";
           let erro =
-            this.edicao === false
+           this.edicao === false
               ? "Erro ao salvar item."
               : "Erro ao atualizar item.";
-          let data = this.objetoEdicao;
+          let data = this.objetoEdicao;          
+          data.id_empresa =  (this.role == "Administrador") ? data.id_empresa : this.usuario.id_empresa;        
           data._method = method;
           data.url = url;
           this.$store
@@ -314,9 +315,9 @@ export default {
               this.edicao === false
                 ? this.listaItens.push(this.objetoEdicao)
                 : Object.assign(
-                    this.listaItens[this.indexEdicao],
-                    this.objetoEdicao
-                  );
+                  this.listaItens[this.indexEdicao],
+                  this.objetoEdicao
+                );
               this.$store.dispatch("module/openSnackBar", {
                 color: "success",
                 timeout: 3000,
@@ -422,6 +423,16 @@ export default {
     formTitle() {
       return this.edicao === false ? "Cadastrar fornecedor" : "Editar fornecedor";
     },
+    usuario: {
+      get() {
+        return store.getters['auth/getUsuario']
+      }
+    },
+    papel: {
+      get() {
+        return store.getters['auth/getRole']
+      }
+    }
   },
   created() {
     store.dispatch("providers/fetchItems");

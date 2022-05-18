@@ -8,5 +8,6 @@ export default {
     getNome: state => state.nome,
     getUsuario: state => state.user,
     getErrorMessage: state => state.errorMessages ,
-    getToken: state => state.token
+    getToken: state => state.token,
+    getRole: state => state.role
 }

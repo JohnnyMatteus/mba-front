@@ -11,6 +11,8 @@ import components from './components'
 import empresas from './empresas'
 import empreendimentos from './empreendimentos'
 import planos from './planos'
+import items from './items'
+import periodicidades from './periodicidades'
 
 Vue.use(Vuex)
 
@@ -29,6 +31,8 @@ export default new Vuex.Store({
     users,
     providers,
     systems,
-    components
+    components,
+    items,
+    periodicidades
   },
 })

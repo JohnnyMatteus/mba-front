@@ -64,6 +64,12 @@
               <v-chip label> Lista </v-chip>
             </span>
           </template>
+          <template v-slot:[`item.data_inicial`]="{ item }">
+            <span>{{ item.data_inicial | dateFormatBr() }} </span>
+          </template>
+          <template v-slot:[`item.data_final`]="{ item }">
+            <span>{{ item.data_final | dateFormatBr() }} </span>
+          </template>
           <template v-slot:[`item.acao`]="{ item }">
             <v-menu bottom left>
               <template v-slot:activator="{ on, attrs }">
@@ -73,7 +79,12 @@
               </template>
 
               <v-list>
-                <v-list-item @click="toggleModalLateral(item)">
+                <v-list-item
+                  :to="{
+                    name: '/adm/planos/plano/view',
+                    params: { id: item.id },
+                  }"
+                >
                   <v-list-item-title>
                     <v-icon size="20" class="me-2"> mdi-eye </v-icon>
                     <span>Visualizar</span>
@@ -116,7 +127,7 @@
       <template slot="contentModalCrud">
         <v-container fluid>
           <v-row wrap>
-            <v-col cols="12" sm="12" md="12"> 
+            <v-col cols="12" sm="12" md="12">
               <v-text-field
                 outlined
                 label="Nome"
@@ -134,7 +145,7 @@
                 trim
               />
             </v-col>
-            <v-col cols="12" sm="12" md="12"> 
+            <v-col cols="12" sm="12" md="12">
               <v-menu
                 ref="menuref"
                 v-model="menu2"
@@ -170,7 +181,7 @@
                 ></v-date-picker>
               </v-menu>
             </v-col>
-            <v-col cols="12" sm="12" md="12"> 
+            <v-col cols="12" sm="12" md="12">
               <v-menu
                 ref="menuref"
                 v-model="menu1"
@@ -204,7 +215,7 @@
                 ></v-date-picker>
               </v-menu>
             </v-col>
-            <v-col cols="12" sm="12" md="12"> 
+            <v-col cols="12" sm="12" md="12">
               <v-select
                 :items="listaEmpreendimentos"
                 outlined
@@ -227,7 +238,7 @@
                 trim
               ></v-select>
             </v-col>
-            <v-col cols="12" sm="12" md="12">             
+            <v-col cols="12" sm="12" md="12">
               <v-select
                 :items="itemsStatus"
                 v-model="objetoEdicao.status"
@@ -263,6 +274,7 @@ import Crud from "@/components/Crud.vue";
 import ModalLateral from "@/components/ModalLateral.vue";
 import modalSistemas from "@/views/Adm/Planos/Sistemas.vue";
 import modalComponentes from "@/views/Adm/Planos/Componentes.vue";
+
 import store from "@/store";
 export default {
   name: "gestao-planos",
@@ -279,7 +291,7 @@ export default {
       dialog: false,
       loadingTable: false,
       loadingControl: {
-        dataTable: false
+        dataTable: false,
       },
       headers: [
         { text: "Nome", value: "nome", sortable: false, hide: "smAndDown" },
@@ -325,7 +337,7 @@ export default {
       ],
       objetoSalvar: [],
       dialogDelete: false,
-      loadingSalvar:false,
+      loadingSalvar: false,
       dialog: false,
       showFormEquipamentos: false,
       showFormSistemas: false,
@@ -339,7 +351,7 @@ export default {
         nome: "",
         status: "",
         id_empreendimento: "",
-        id_empresa: ""
+        id_empresa: "",
       },
       indexEdicao: 0,
       edicao: false,
@@ -363,7 +375,7 @@ export default {
     },
     salvar() {
       this.$validator.validate("plano.*").then((result) => {
-        if (result) {          
+        if (result) {
           this.loadingSalvar = true;
           let url =
             this.edicao === false
@@ -379,9 +391,9 @@ export default {
           let data = this.objetoEdicao;
           data._method = method;
           data.url = url;
-          data.id_empresa = this.objetoEdicao.empreendimento.id_empresa
-          data.id_empreendimento = this.objetoEdicao.empreendimento.id
-          delete data.empreendimento
+          data.id_empresa = this.objetoEdicao.empreendimento.id_empresa;
+          data.id_empreendimento = this.objetoEdicao.empreendimento.id;
+          delete data.empreendimento;
           this.$store
             .dispatch("planos/saveOrUpdate", { data })
             .then(() => {
@@ -406,7 +418,7 @@ export default {
             })
             .finally(() => {
               this.fechar();
-            });            
+            });
         } else {
           this.$store.dispatch("module/openSnackBar", {
             color: "error",
