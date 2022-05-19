@@ -9,9 +9,9 @@ export default [
     action: 'construtora',
   },
   {
-    title: 'Home',
+    title: 'Painel',
     icon: mdiHomeOutline,
-    to: '/empresa/dashboad',
+    to: '/sindico/dashboad',
     resource: 'Painel',
     action: 'sindico',
   },

@@ -31,13 +31,18 @@
         <v-card-text>
           <v-alert text color="primary">
             <small class="d-block mb-1">
-              Admin e-mail: <strong>admin@manutencao.com</strong> / Senha:
-              <strong>admin</strong>
+              Admin: <strong>admin@manutencao.com</strong> 
             </small>
-            <small>
-              Construtora e-mail: <strong>construtora@manutencao.com</strong> /
-              Senha: <strong>devomudar</strong>
+            <small class="d-block mb-1">
+              Construtora: <strong>construtora@manutencao.com</strong> 
             </small>
+            <small class="d-block mb-1">
+              Sindico: <strong>sindico@manutencao.com</strong> 
+            </small>
+            <small class="d-block mb-1">
+              Senhas: <strong>devomudar</strong>
+            </small>
+              
           </v-alert>
         </v-card-text>
 
@@ -188,8 +193,8 @@ export default {
     const auth_success = ref(false);
     const isPasswordVisible = ref(false);
     const loadingBtnLogin = ref(false);
-    const email = ref("admin@materio.com");
-    const password = ref("admin");
+    const email = ref("");
+    const password = ref("");
     const errorMessages = ref([]);
     const socialLink = [
       {

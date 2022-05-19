@@ -57,13 +57,6 @@
                   </v-list-item-title>
                 </v-list-item>
 
-                <v-list-item @click="registrarAtividade(item)">
-                  <v-list-item-title>
-                    <v-icon size="20" class="me-2"> mdi-application-edit-outline </v-icon>
-                    <span>Atividades</span>
-                  </v-list-item-title>
-                </v-list-item>
-
                 <v-list-item @click="editar(item)">
                   <v-list-item-title>
                     <v-icon size="20" class="me-2"> mdi-pencil </v-icon>
@@ -99,6 +92,75 @@
       <!-- ------------- MODAL DE CADASTRO --------------------------------------------- -->
       <template slot="contentModalCrud">
         <v-row>
+          <v-col cols="12" md="6">
+            <v-menu
+              ref="menuref"
+              v-model="menu2"
+              :close-on-content-click="false"
+              transition="scale-transition"
+              offset-y
+              max-width="290px"
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  outlined
+                  dense
+                  v-model="objetoEdicao.data_inicial"
+                  label="Data inicial"
+                  persistent-hint
+                  v-bind="attrs"
+                  v-on="on"
+                  :hint="errors.first('data_inicial')"
+                  :error="errors.collect('data_inicial').length ? true : false"
+                  v-validate="'required'"
+                  data-vv-scope="plano"
+                ></v-text-field>
+              </template>
+
+              <v-date-picker
+                v-model="objetoEdicao.data_inicial"
+                no-title
+                color="primary"
+                @input="menu1 = false"
+              ></v-date-picker>
+            </v-menu>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-menu
+              ref="menuref"
+              v-model="menu1"
+              :close-on-content-click="false"
+              transition="scale-transition"
+              offset-y
+              max-width="290px"
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  outlined
+                  dense
+                  v-model="objetoEdicao.data_final"
+                  label="Data final"
+                  persistent-hint
+                  v-bind="attrs"
+                  v-on="on"
+                  :hint="errors.first('data_final')"
+                  :error="errors.collect('data_final').length ? true : false"
+                  v-validate="'required'"
+                  data-vv-scope="plano"
+                ></v-text-field>
+              </template>
+
+              <v-date-picker
+                v-model="objetoEdicao.data_final"
+                no-title
+                color="primary"
+                @input="menu1 = false"
+              ></v-date-picker>
+            </v-menu>
+          </v-col>
           <v-col cols="12" md="6">
             <v-select
               :items="itemsEquipamentos"
@@ -239,11 +301,6 @@
         <span>{{ item.updated_at | dateTimeFormatBr() }} </span>
       </template>
     </modalLateral>
-    <modal-atividades
-      :visible="showFormAtividades"
-      :item_plano="item_plano"
-      @close="showFormAtividades = false"
-    ></modal-atividades>
   </div>
 </template>
 
@@ -251,12 +308,10 @@
 import Crud from "@/components/Crud.vue";
 import ModalLateral from "@/components/ModalLateral.vue";
 import store from "@/store";
-import modalAtividades from '../Atividades.vue';
-
 
 export default {
   name: "plano-view",
-  components: { Crud, ModalLateral, modalAtividades },
+  components: { Crud, ModalLateral },
   data: () => ({
     searchTextField: "",
     dialog: false,
@@ -330,7 +385,8 @@ export default {
     dialogDelete: false,
     loadingSalvar: false,
     dialog: false,
-    showFormAtividades:false,
+    showFormEquipamentos: false,
+    showFormSistemas: false,
     modalLateral: {
       show: false,
       item: [],
@@ -343,9 +399,10 @@ export default {
     },
     indexEdicao: 0,
     edicao: false,
+    menu1: "",
+    menu2: "",
     listaEmpreendimentos: [],
     id_plano: 0,
-    item_plano: []
   }),
   methods: {
     editar(item) {
@@ -472,11 +529,6 @@ export default {
       const [month, day, year] = dates.split("/");
       return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
     },
-    registrarAtividade(item)
-    {
-      this.item_plano = item;
-      this.showFormAtividades = true;
-    }
   },
   computed: {
     computedHeaders() {

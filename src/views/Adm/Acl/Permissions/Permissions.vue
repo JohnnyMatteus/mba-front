@@ -80,7 +80,7 @@
         </template>
         <!-- updated_at -->
         <template #[`item.updated_at`]="{ item }">
-          <span>{{ item.created_at | dateTimeFormatBr() }}</span>
+          <span>{{ item.updated_at | dateTimeFormatBr() }}</span>
         </template>
         <!-- actions -->
         <template #[`item.actions`]="{ item }">

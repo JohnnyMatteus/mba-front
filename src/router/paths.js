@@ -1,6 +1,7 @@
 import store from '@/store';
 import admRouter from './adm/index';
 import empresaRouter from './empresas/index';
+import sindicosRouter from './sindicos/index';
 
 
 export default [
@@ -92,4 +93,5 @@ export default [
   },
   ...admRouter,
   ...empresaRouter,
+  ...sindicosRouter
 ];

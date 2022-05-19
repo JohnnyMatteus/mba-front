@@ -16,7 +16,7 @@ const routes = [
 
       if (userRole === 'Administrador') return { name: '/adm/dashboad-adm' }
       if (userRole === 'Construtora') return { name: '/empresa/dashboad' }
-      if (userRole === 'Sindico') return { name: '/empresa/dashboad' }          
+      if (userRole === 'Sindico') return { name: '/sindico/dashboad' }          
       
       return { name: 'auth-login', query: to.query }
               
