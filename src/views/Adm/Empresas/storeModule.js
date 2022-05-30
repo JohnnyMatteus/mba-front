@@ -62,5 +62,13 @@ export default {
           .catch(error => reject(error))
       })
     },
+    downloadExport(ctx, type){
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`/v1/empresas/export/${type}`, { responseType: 'blob' })
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    }
   },
 };

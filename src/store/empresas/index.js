@@ -6,13 +6,15 @@ export default {
     itemsList: [],
     empresaList: [],
     item: [], 
-    indexEdicao: false
+    indexEdicao: false,
+    dataDashboad: []
    },
   getters: {
     getItemsList: state => state.itemsList,
     getEmpresasList: state => state.empresaList,
     getItem: state => state.item,
-    getIndexEdicao: state => state.indexEdicao
+    getIndexEdicao: state => state.indexEdicao,
+    getDataDashboad: state => state.dataDashboad
 
   },
   mutations: {
@@ -20,6 +22,7 @@ export default {
     setEmpresasList: (state, value) => { state.empresaList = value },
     setItem: (state, value) => { state.item = value },
     setIndexEdicao: (state, value) => { state.indexEdicao = value },    
+    setDataDashboard: (state, value) => { state.dataDashboad = value }
   },
   actions: {
     fetchItems(ctx) {
@@ -62,5 +65,13 @@ export default {
           .catch(error => reject(error))
       })
     },
+    fetchDataDashboad(ctx) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get('/v1/dashboard/administrativo')
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    }
   },
 };

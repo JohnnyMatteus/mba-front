@@ -33,9 +33,9 @@ export default [
     },
   },  
   {
-    path: '/authorize/github/callback',
-    name: 'auth-login-github',
-    component: () => import('@/views/LoginGithub.vue'),
+    path: '/authorize/:provider/callback',
+    name: 'auth-login-social',
+    component: () => import('@/views/LoginSocial.vue'),
     meta: {
       layout: 'blank',
       resource: 'Public',

@@ -92,15 +92,6 @@
             </template>
 
             <v-list>
-              <v-list-item @click="show(item)">
-                <v-list-item-title>
-                  <v-icon size="20" class="me-2">
-                    {{ icons.mdiEyeOutline }}
-                  </v-icon>
-                  <span>visualizar</span>
-                </v-list-item-title>
-              </v-list-item>
-
               <v-list-item @click.stop="edit(item)">
                 <v-list-item-title>
                   <v-icon size="20" class="me-2">
@@ -209,7 +200,7 @@
               </div>
               <div class="col-6">
                 <v-btn color="primary" class="me-3" type="submit">
-                  Adicionar
+                  Salvar
                 </v-btn>
               </div>
               <div class="col-6">

@@ -1,31 +1,9 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="12" md="3" sm="6" order="1" class="align-self-end">
-        <statistics-card-with-images
-          :avatar="ratingsOptions.avatar"
-          :avatar-width="ratingsOptions.avatarWidth"
-          :statistics="ratingsOptions.statistics"
-          :stat-title="ratingsOptions.statTitle"
-        ></statistics-card-with-images>
-      </v-col>
       <v-col
         cols="12"
-        md="3"
-        sm="6"
-        order="2"
-        class="align-self-end"
-      >
-        <statistics-card-with-images
-          :avatar="sessionsOptions.avatar"
-          :avatar-width="sessionsOptions.avatarWidth"
-          :statistics="sessionsOptions.statistics"
-          :stat-title="sessionsOptions.statTitle"
-        ></statistics-card-with-images>
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
+        md="12"
         sm="12"
         order="5"
         order-md="3"
@@ -90,100 +68,9 @@
       </v-col>
     </v-row>
     <v-row>
+      
       <v-col
         cols="12"
-        md="6"
-        sm="12"
-      >
-        <v-card>
-          <v-card-title class="align-start">
-            <span>Visão geral dos planos de manutenções</span>
-          </v-card-title>
-
-          <v-card-text>
-            <v-row>
-              <v-col
-                cols="12"
-                sm="6"
-              >
-                <vue-apex-charts
-                  id="chart-sales-overview"
-                  :options="chartOptions"
-                  :series="chartData"
-                  class="h-full d-flex align-center"
-                ></vue-apex-charts>
-              </v-col>
-
-              <v-col
-                cols="12"
-                sm="6"
-                class="d-flex flex-column justify-center"
-              >
-                <div class="d-flex align-center">
-                  <v-avatar
-                    class="v-avatar-light-bg primary--text"
-                    rounded
-                    size="40"
-                  >
-                    <v-icon
-                      size="30"
-                      color="primary"
-                    >
-                      {{ icons.mdiReceiptTextCheckOutline }}
-                    </v-icon>
-                  </v-avatar>
-                  <div class="ms-4 d-flex flex-column">
-                    <p class="text--primary mb-0 text-base">
-                      Total de planos
-                    </p>
-                    <span class="text--primary font-weight-semibold text-xl">104</span>
-                  </div>
-                </div>
-
-                <v-divider class="my-6"></v-divider>
-
-                <table class="sales-overview-stats-table">
-                  <tr>
-                    <td>
-                      <div class="mb-0">
-                        <div class="stats-dot primary d-inline-block rounded-circle me-2"></div>
-                        <span>PENDENTES</span>
-                      </div>
-                      <span class="text-base text--primary font-weight-semibold ms-4">12</span>
-                    </td>
-                    <td>
-                      <div class="mb-0">
-                        <div class="stats-dot primary d-inline-block rounded-circle me-2"></div>
-                        <span>EM ANALISE</span>
-                      </div>
-                      <span class="text-base text--primary font-weight-semibold ms-4">24</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="mb-0">
-                        <div class="stats-dot primary d-inline-block rounded-circle me-2"></div>
-                        <span>APROVADOS</span>
-                      </div>
-                      <span class="text-base text--primary font-weight-semibold ms-4">15</span>
-                    </td>
-                    <td>
-                      <div class="mb-0">
-                        <div class="stats-dot secondary d-inline-block rounded-circle me-2"></div>
-                        <span>EM PRODUÇÃO</span>
-                      </div>
-                      <span class="text-base text--primary font-weight-semibold ms-4">50</span>
-                    </td>
-                  </tr>
-                </table>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col
-        cols="12"
-        md="6"
         sm="12"
       >
         <v-card>
@@ -192,7 +79,7 @@
         <p class="mb-2">
           Total de atividades semanais
         </p>
-        <small class="text--secondary text-base">Total 100 atividades</small>
+        <small class="text--secondary text-base">Total 0 atividades</small>
       </div>
     </v-card-title>
     <v-card-text>
@@ -220,7 +107,7 @@
           </v-avatar>
           <div class="ms-4 d-flex flex-column">
             <p class="text--primary font-weight-semibold text-base mb-0">
-              21.8k
+              0
             </p>
             <span>Agendadas</span>
           </div>
@@ -241,7 +128,7 @@
           </v-avatar>
           <div class="ms-4 d-flex flex-column">
             <p class="text--primary font-weight-semibold text-base mb-0">
-              21.8k
+              0
             </p>
             <span>CONCLUIDAS</span>
           </div>
@@ -261,7 +148,7 @@
           </v-avatar>
           <div class="ms-4 d-flex flex-column">
             <p class="text--primary font-weight-semibold text-base mb-0">
-              21.8k
+              0
             </p>
             <span>VENCIDAS</span>
           </div>
@@ -293,7 +180,7 @@ export default {
     const $vuetify = getVuetify()
 
     const ratingsOptions = {
-      statTitle: "Usuários",
+      statTitle: "Atividades ",
       statistics: "400",
       avatar: require("@/assets/images/avatars/9.png"),
       avatarWidth: "111",
@@ -309,22 +196,22 @@ export default {
     const statisticsData = [
       {
         title: 'A fazer',
-        total: '245k',
+        total: '0',
         type: 'ativo',
       },
       {
         title: 'Pendentes',
-        total: '12.5k',
+        total: '0',
         type: 'pendente',
       },
       {
         title: 'Concluidas',
-        total: '1.54k',
+        total: '0',
         type: 'concluida',
       },
       {
         title: 'Não feitas',
-        total: '1.54k',
+        total: '0',
         type: 'cancelada',
       },
     ]

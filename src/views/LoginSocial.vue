@@ -22,7 +22,7 @@
 
         <v-card-text>
           <p class="text-2xl font-weight-semibold text--primary mb-2">
-            Login via Github! 👋🏻
+            Login via Social! 👋🏻
           </p>
           <p class="mb-2">Aguarde um momento.</p>
         </v-card-text>
@@ -64,10 +64,13 @@ import themeConfig from "@themeConfig";
 import store from "@/store";
 
 export default {
-  name: "LoginGithub",
+  name: "LoginSocial",
   components: {},
   data: () => ({
-    payload: "",
+    data: {
+      payload: "",
+      provider: ""
+    },
     isPasswordVisible: false,
     email: "",
     password: "",
@@ -81,13 +84,13 @@ export default {
   methods: {
     async loginUser() {
       store
-        .dispatch("auth/loginUserCallback", { code: this.payload })
+        .dispatch("auth/loginUserCallback", this.data)
         .then((resp) => {
-          console.log(resp)
           if (resp.data.data.access_token) {
             const userData = JSON.stringify(localStorage.getItem("user"));
             const userToken = localStorage.getItem("accessToken");
-            if (userData !== undefined && userToken !== undefined) {
+            if (userData !== undefined && userToken !== undefined)
+            {
               store.dispatch("auth/dadosUsuario");
             }
           }
@@ -99,7 +102,7 @@ export default {
             });
             setTimeout(() => {
               this.$router.push('/login')
-            }, 300);
+            }, 3000);
           }
           else if (resp.data.data.codigo = 1) {
             this.$store.dispatch("module/openSnackBar", {
@@ -109,7 +112,7 @@ export default {
             });
             setTimeout(() => {
               this.$router.push('/login')
-            }, 300);
+            }, 3000);
           }
         })
         .catch(() => {
@@ -125,9 +128,10 @@ export default {
     },
   },
   created() {
-    this.payload = this.$route.query.code;
+    this.data.payload = this.$route.query.code;
+    this.data.provider = this.$route.path.split("/")[2];
     this.loginUser();
-  },
+  }
 };
 </script>
 

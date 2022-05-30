@@ -8,10 +8,10 @@ async function login({ commit, dispatch }, data) {
     .catch(error => reject(error))
   });
 }
-async function loginGithub({ commit, dispatch }) {
+async function loginSocial({ commit, dispatch }, provider) {
   return new Promise((resolve, reject) => {
     axios({
-      url: process.env.VUE_APP_BASE_URI_API_MANUTENCAO + "/authorize/github/redirect",
+      url: process.env.VUE_APP_BASE_URI_API_MANUTENCAO + `/authorize/${provider}/redirect`,
       method: "GET",
     })
       .then((response) => {
@@ -25,14 +25,11 @@ async function loginGithub({ commit, dispatch }) {
   });
 } 
 
-async function loginUserCallback({ commit, dispatch }, payload) {
+async function loginUserCallback({ commit, dispatch }, data) {
   return new Promise((resolve, reject) => {
-    axios({
-      url: process.env.VUE_APP_BASE_URI_API_MANUTENCAO + "/authorize/github/callback",
-      params: payload,
-      method: "GET",
-    })
-      .then((response) => {
+    axios
+    .get(process.env.VUE_APP_BASE_URI_API_MANUTENCAO + `/authorize/${data.provider}/callback?code=${data.payload}`)
+    .then((response) => {
         if (response.status === 200 && response.data.data.access_token) {
           const token = response.data.data.access_token;
           localStorage.setItem("accessToken", token);
@@ -118,7 +115,7 @@ async function dadosUsuario({ commit, dispatch }) {
 
 export default {
   login,
-  loginGithub,
+  loginSocial,
   loginUserCallback,
   recuperarSenha,
   novaSenha,

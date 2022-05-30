@@ -103,21 +103,7 @@
                 </v-card-actions>
               </v-card>
           </v-dialog>
-          
-          <v-btn
-            color="secondary"
-            outlined
-            class="mb-4"
-            large
-          >
-            <v-icon
-              size="17"
-              class="me-1"
-            >
-              mdi-export-variant
-            </v-icon>
-            <span>Exportar</span>
-          </v-btn>
+          <slot name="exportar"></slot>
         </div>
       </v-card-text>
       <div class="mt-1">

@@ -14,6 +14,39 @@
       :searchTextField.sync="searchTextField"
       :dialogDelete.sync="dialogDelete"
     >
+      <template slot="exportar">
+        <v-menu bottom left>
+            <template v-slot:activator="{ on, attrs }">
+              <v-menu offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    color="secondary"
+                    outlined
+                    v-bind="attrs"
+                    v-on="on"
+                    class="mb-4"
+                  >
+                    <v-icon size="17" class="me-1">
+                      mdi-export-variant
+                    </v-icon>
+                    <span>Exportar</span>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item v-for="(item, index) in MenuExport" :key="index">
+                    <v-list-item-title  @click.stop="resolvedExport(item.type)">
+                      <v-icon size="15" class="me-2">
+                        {{ item.icon }}
+                      </v-icon>
+                      <span>{{ item.title }}</span>
+                    </v-list-item-title>
+                    <v-list-item-title></v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </template>
+          </v-menu>
+      </template>
       <template slot="data-table">
         <v-data-table
           :loading="loadingTable"
@@ -275,7 +308,13 @@ export default {
         id_empresa: ""
       },
       indexEdicao: 0,
-      edicao: false
+      edicao: false, 
+      MenuExport:[
+
+        {title: 'PDF', type: 'pdf', icon: 'mdi-file-pdf-box'}, 
+        {title: 'CSV', type: 'csv', icon: 'mdi-file-excel'}
+      
+      ]
     };
   },
   methods: {
@@ -396,6 +435,23 @@ export default {
       if (status === 'I') return 'INATIVO'
 
       return 'PENDENTE'
+    },
+    resolvedExport(type) {
+        this.$store
+        .dispatch('providers/downloadExport', type)
+        .then(response => {
+          let file = (type == 'pdf') ? "application/pdf" : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          console.log(response.data);
+          const blob = new Blob([response.data], { type: file })
+          const link = document.createElement('a')
+          link.href = URL.createObjectURL(blob)
+          link.download = 'lista_fornecedores'
+          link.click()
+          URL.revokeObjectURL(link.href)
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
   computed: {

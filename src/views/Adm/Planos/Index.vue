@@ -14,28 +14,24 @@
       :searchTextField.sync="searchTextField"
       :dialogDelete.sync="dialogDelete"
     >
-      <template slot="data-content">
-        <div class="row mr-2">
-          <div class="col-12 d-flex flex-row-reverse">
-            <v-menu transition="slide-y-transition" bottom>
-              <template #activator="{ on, attrs }">
-                <v-btn color="primary" dark v-bind="attrs" v-on="on" large>
-                  <v-icon size="17" class="me-1"> mdi-file-cog-outline </v-icon>
-                  Configurações
-                </v-btn>
-              </template>
+      <template slot="exportar">
+        <v-menu offset-y >
+          <template #activator="{ on, attrs }">
+            <v-btn color="primary" dark v-bind="attrs" v-on="on" large class="mb-4">
+              <v-icon size="17" class="me-1"> mdi-file-cog-outline </v-icon>
+              Complementos
+            </v-btn>
+          </template>
 
-              <v-list>
-                <v-list-item @click="modalComponentes()">
-                  <v-list-item-title>Equipamentos</v-list-item-title>
-                </v-list-item>
-                <v-list-item @click="modalSistemas()">
-                  <v-list-item-title>Sistemas</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </div>
-        </div>
+          <v-list>
+            <v-list-item @click="modalComponentes()">
+              <v-list-item-title>Equipamentos</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="modalSistemas()">
+              <v-list-item-title>Sistemas</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </template>
       <template slot="data-table">
         <v-data-table
@@ -87,7 +83,7 @@
                 >
                   <v-list-item-title>
                     <v-icon size="20" class="me-2"> mdi-eye </v-icon>
-                    <span>Visualizar</span>
+                    <span>Atividades</span>
                   </v-list-item-title>
                 </v-list-item>
 
@@ -295,7 +291,7 @@ export default {
       },
       headers: [
         { text: "Nome", value: "nome", sortable: false, hide: "smAndDown" },
-        { text: "Empreendimento", value: "empreendimento" },
+        { text: "Empreendimento", value: "empreendimento_name" },
         { text: "Data inicial", value: "data_inicial" },
         { text: "Data final", value: "data_final" },
         { text: "Status", value: "status" },
@@ -334,6 +330,8 @@ export default {
       itemsStatus: [
         { text: "Ativo", value: "A" },
         { text: "Inativo", value: "I" },
+        { text: "Pendente", value: "P" },
+        { text: "Concluido", value: "C" },
       ],
       objetoSalvar: [],
       dialogDelete: false,
@@ -471,6 +469,7 @@ export default {
       if (status === "P") return "warning";
       if (status === "A") return "success";
       if (status === "I") return "secondary";
+      if (status === "C") return "primary";
 
       return "warning";
     },
@@ -478,6 +477,7 @@ export default {
       if (status === "P") return "PENDENTE";
       if (status === "A") return "ATIVO";
       if (status === "I") return "INATIVO";
+      if (status === "C") return "CONCLUIDO";
 
       return "PENDENTE";
     },

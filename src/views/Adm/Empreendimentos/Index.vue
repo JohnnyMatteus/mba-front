@@ -28,39 +28,34 @@
 
           <v-menu bottom left>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="secondary"
-                outlined
-                v-bind="attrs"
-                v-on="on"
-                class="mb-4"
-              >
-                <v-icon size="17" class="me-1">
-                  {{ icons.mdiExportVariant }}
-                </v-icon>
-                <span>Exportar</span>
-              </v-btn>
+              <v-menu offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    color="secondary"
+                    outlined
+                    v-bind="attrs"
+                    v-on="on"
+                    class="mb-4"
+                  >
+                    <v-icon size="17" class="me-1">
+                      {{ icons.mdiExportVariant }}
+                    </v-icon>
+                    <span>Exportar</span>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item v-for="(item, index) in MenuExport" :key="index">
+                    <v-list-item-title  @click.stop="resolvedExport(item.type)">
+                      <v-icon size="15" class="me-2">
+                        {{ item.icon }}
+                      </v-icon>
+                      <span>{{ item.title }}</span>
+                    </v-list-item-title>
+                    <v-list-item-title></v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
             </template>
-
-            <v-list>
-              <v-list-item>
-                <v-list-item-title>
-                  <v-icon size="20" class="me-2">
-                    {{ icons.mdiFilePdfBox }}
-                  </v-icon>
-                  <span>PDF</span>
-                </v-list-item-title>
-              </v-list-item>
-
-              <v-list-item>
-                <v-list-item-title>
-                  <v-icon size="20" class="me-2">
-                    {{ icons.mdiFileExcel }}
-                  </v-icon>
-                  <span>Excel</span>
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
           </v-menu>
         </div>
       </v-card-text>
@@ -300,7 +295,7 @@
           </v-card-text>
           <v-card-actions>
             <v-btn color="primary" class="me-3" type="submit">
-              Adicionar
+              Salvar
             </v-btn>
             <v-btn
               color="secondary"
@@ -457,6 +452,24 @@ export default {
       store.commit("app-empreendimentos/setIndexEdicao", false);
       isAddItem.value = false;
     }
+    function resolvedExport(type) {
+      store
+      .dispatch('app-empreendimentos/downloadExport', type)
+      .then(response => {
+        let file = (type == 'pdf') ? "application/pdf" : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        console.log(response.data);
+        const blob = new Blob([response.data], { type: file })
+        const link = document.createElement('a')
+        link.href = URL.createObjectURL(blob)
+        link.download = 'lista_empreendimentos'
+        link.click()
+        URL.revokeObjectURL(link.href)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    }
+    const MenuExport = [{title: 'PDF', type: 'pdf', icon: mdiFilePdfBox}, {title: 'CSV', type: 'csv', icon: mdiFileExcel}];
     const validate = () => {
       form.value.validate();
     };
@@ -531,9 +544,11 @@ export default {
       valid,
       validate,
       indexEdicao,
+      MenuExport,
       resolveStatusVariant,
       resolveNameStatusVariant,
       resolvedRequired,
+      resolvedExport,
       role,
 
       validators: { required, urlValidator, emailValidator },

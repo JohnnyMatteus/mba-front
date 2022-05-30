@@ -39,13 +39,7 @@ export default [
         to: '/adm/configuracao/acl/permissoes',
         resource: 'Permission',
         action: 'view',
-      },
-      {
-        title: 'Menus',
-        to: '/adm/configuracao/menus',
-        resource: 'Menu',
-        action: 'view'
-      },
+      }
     ],
   },
   {
@@ -76,7 +70,7 @@ export default [
     action: 'view',
     children: [
       {
-        title: 'Lista',
+        title: 'Lista de planos',
         to: '/adm/planos/lista',
         resource: 'Planos',
         action: 'view'

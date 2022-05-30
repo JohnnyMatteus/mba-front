@@ -28,39 +28,34 @@
 
           <v-menu bottom left>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="secondary"
-                outlined
-                v-bind="attrs"
-                v-on="on"
-                class="mb-4"
-              >
-                <v-icon size="17" class="me-1">
-                  {{ icons.mdiExportVariant }}
-                </v-icon>
-                <span>Exportar</span>
-              </v-btn>
+              <v-menu offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    color="secondary"
+                    outlined
+                    v-bind="attrs"
+                    v-on="on"
+                    class="mb-4"
+                  >
+                    <v-icon size="17" class="me-1">
+                      {{ icons.mdiExportVariant }}
+                    </v-icon>
+                    <span>Exportar</span>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item v-for="(item, index) in MenuExport" :key="index">
+                    <v-list-item-title  @click.stop="resolvedExport(item.type)">
+                      <v-icon size="15" class="me-2">
+                        {{ item.icon }}
+                      </v-icon>
+                      <span>{{ item.title }}</span>
+                    </v-list-item-title>
+                    <v-list-item-title></v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
             </template>
-
-            <v-list>
-              <v-list-item>
-                <v-list-item-title>
-                  <v-icon size="20" class="me-2">
-                    {{ icons.mdiFilePdfBox }}
-                  </v-icon>
-                  <span>PDF</span>
-                </v-list-item-title>
-              </v-list-item>
-
-              <v-list-item>
-                <v-list-item-title>
-                  <v-icon size="20" class="me-2">
-                    {{ icons.mdiFileExcel }}
-                  </v-icon>
-                  <span>Excel</span>
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
           </v-menu>
         </div>
       </v-card-text>
@@ -138,14 +133,14 @@
                   <span>Editar</span>
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item @click.stop="resetPassword(item)">
+              <!--<v-list-item @click.stop="resetPassword(item)">
                 <v-list-item-title>
                   <v-icon size="20" class="me-2">
                     {{ icons.mdiPencilOutline }}
                   </v-icon>
                   <span>Reiniciar senha</span>
                 </v-list-item-title>
-              </v-list-item>
+              </v-list-item> -->
 
               <v-list-item @click="remover(item)">
                 <v-list-item-title>
@@ -272,9 +267,7 @@
             </div>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary" class="me-3" type="submit">
-              Adicionar
-            </v-btn>
+            <v-btn color="primary" class="me-3" type="submit"> Salvar </v-btn>
             <v-btn
               color="secondary"
               outlined
@@ -377,6 +370,7 @@ export default {
       empreendimentos: [],
       role: "",
     });
+    const MenuExport = [{title: 'PDF', type: 'pdf', icon: mdiFilePdfBox}, {title: 'CSV', type: 'csv', icon: mdiFileExcel}];
 
     const dialogRemove = ref(false);
 
@@ -435,6 +429,23 @@ export default {
       isAddItem.value = false;
     }
     function resetPassword(item) {}
+    function resolvedExport(type) {
+          store
+          .dispatch('app-usuarios/downloadExport', type)
+          .then(response => {
+            let file = (type == 'pdf') ? "application/pdf" : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            console.log(response.data);
+            const blob = new Blob([response.data], { type: file })
+            const link = document.createElement('a')
+            link.href = URL.createObjectURL(blob)
+            link.download = 'lista_usuarios'
+            link.click()
+            URL.revokeObjectURL(link.href)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+    }
     const validate = () => {
       form.value.validate();
     };
@@ -442,13 +453,13 @@ export default {
       if (valid.value) {
         const formData = new FormData();
 
-        formData.append('name', item.value.name);
-        formData.append('email', item.value.email);
-        formData.append('status', item.value.status);
-        formData.append('avatar', item.value.avatar);
-        formData.append('id_empresa', item.value.id_empresa);
-        formData.append('empreendimentos', item.value.empreendimentos);
-        formData.append('role', item.value.role);
+        formData.append("name", item.value.name);
+        formData.append("email", item.value.email);
+        formData.append("status", item.value.status);
+        formData.append("avatar", item.value.avatar);
+        formData.append("id_empresa", item.value.id_empresa);
+        formData.append("empreendimentos", item.value.empreendimentos);
+        formData.append("role", item.value.role);
 
         if (!indexEdicao.value) {
           store.dispatch("app-usuarios/addItem", formData).then(() => {
@@ -515,6 +526,7 @@ export default {
       resolvedRequired,
       resolveUserRoleVariant,
       resolveUserRoleIcon,
+      resolvedExport,
 
       validators: { required, emailValidator },
 
@@ -536,6 +548,7 @@ export default {
         mdiCheckboxBlankOutline,
         mdiFoodAppleOutline,
       },
+      MenuExport
     };
   },
 };

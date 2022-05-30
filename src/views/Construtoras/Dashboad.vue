@@ -136,7 +136,7 @@
                     <p class="text--primary mb-0 text-base">
                       Total de planos
                     </p>
-                    <span class="text--primary font-weight-semibold text-xl">104</span>
+                    <span class="text--primary font-weight-semibold text-xl">0</span>
                   </div>
                 </div>
 
@@ -149,14 +149,14 @@
                         <div class="stats-dot primary d-inline-block rounded-circle me-2"></div>
                         <span>PENDENTES</span>
                       </div>
-                      <span class="text-base text--primary font-weight-semibold ms-4">12</span>
+                      <span class="text-base text--primary font-weight-semibold ms-4">0</span>
                     </td>
                     <td>
                       <div class="mb-0">
                         <div class="stats-dot primary d-inline-block rounded-circle me-2"></div>
                         <span>EM ANALISE</span>
                       </div>
-                      <span class="text-base text--primary font-weight-semibold ms-4">24</span>
+                      <span class="text-base text--primary font-weight-semibold ms-4">0</span>
                     </td>
                   </tr>
                   <tr>
@@ -165,14 +165,14 @@
                         <div class="stats-dot primary d-inline-block rounded-circle me-2"></div>
                         <span>APROVADOS</span>
                       </div>
-                      <span class="text-base text--primary font-weight-semibold ms-4">15</span>
+                      <span class="text-base text--primary font-weight-semibold ms-4">0</span>
                     </td>
                     <td>
                       <div class="mb-0">
                         <div class="stats-dot secondary d-inline-block rounded-circle me-2"></div>
                         <span>EM PRODUÇÃO</span>
                       </div>
-                      <span class="text-base text--primary font-weight-semibold ms-4">50</span>
+                      <span class="text-base text--primary font-weight-semibold ms-4">0</span>
                     </td>
                   </tr>
                 </table>
@@ -192,7 +192,7 @@
         <p class="mb-2">
           Total de atividades semanais
         </p>
-        <small class="text--secondary text-base">Total 100 atividades</small>
+        <small class="text--secondary text-base">Total 0 atividades</small>
       </div>
     </v-card-title>
     <v-card-text>
@@ -220,7 +220,7 @@
           </v-avatar>
           <div class="ms-4 d-flex flex-column">
             <p class="text--primary font-weight-semibold text-base mb-0">
-              21.8k
+              0
             </p>
             <span>Agendadas</span>
           </div>
@@ -241,7 +241,7 @@
           </v-avatar>
           <div class="ms-4 d-flex flex-column">
             <p class="text--primary font-weight-semibold text-base mb-0">
-              21.8k
+              0
             </p>
             <span>CONCLUIDAS</span>
           </div>
@@ -261,7 +261,7 @@
           </v-avatar>
           <div class="ms-4 d-flex flex-column">
             <p class="text--primary font-weight-semibold text-base mb-0">
-              21.8k
+              0
             </p>
             <span>VENCIDAS</span>
           </div>
@@ -294,14 +294,14 @@ export default {
 
     const ratingsOptions = {
       statTitle: "Usuários",
-      statistics: "400",
+      statistics: "1",
       avatar: require("@/assets/images/avatars/9.png"),
       avatarWidth: "111",
     }
 
     const sessionsOptions = {
       statTitle: 'Empreendimentos',
-      statistics: '10',
+      statistics: '1',
       avatar: require('@/assets/images/avatars/10.png'),
       avatarWidth: '86',
     }
@@ -309,22 +309,22 @@ export default {
     const statisticsData = [
       {
         title: 'A fazer',
-        total: '245k',
+        total: '0',
         type: 'ativo',
       },
       {
         title: 'Pendentes',
-        total: '12.5k',
+        total: '0',
         type: 'pendente',
       },
       {
         title: 'Concluidas',
-        total: '1.54k',
+        total: '0',
         type: 'concluida',
       },
       {
         title: 'Não feitas',
-        total: '1.54k',
+        total: '0',
         type: 'cancelada',
       },
     ]
@@ -385,7 +385,7 @@ export default {
       },
     }
 
-    const chartData = [12, 24, 15, 50, 3]
+    const chartData = [0, 0, 0, 0, 0]
 
     const chartOptions2 = {
       colors: [
@@ -448,7 +448,7 @@ export default {
 
     const chartData2 = [
       {
-        data: [40, 60, 50, 60, 90, 40, 50],
+        data: [0, 0, 0, 0, 0, 0, 0],
       },
     ]
 

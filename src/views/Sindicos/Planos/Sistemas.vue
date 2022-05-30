@@ -105,14 +105,13 @@
 
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="close">
+                  <v-btn color="red" @click="close">
                     Fechar
                   </v-btn>
                   <v-btn
-                    color="blue darken-1"
-                    text
+                    color="success"
                     @click="save"
-                    :loading="loadingSalvar"
+                    :loading="loadingSalvarSistemas"
                   >
                     salvar
                   </v-btn>
@@ -126,10 +125,10 @@
                 >
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="closeDelete"
+                  <v-btn color="blue darken-1" @click="closeDelete"
                     >Fechar</v-btn
                   >
-                  <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                  <v-btn color="danger" @click="deleteItemConfirm"
                     >Excluir</v-btn
                   >
                   <v-spacer></v-spacer>
@@ -151,7 +150,7 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="default" outlined @click.stop="show = false">
+        <v-btn color="primary" outlined @click.stop="show = false">
           Fechar
         </v-btn>
       </v-card-actions>
@@ -181,7 +180,7 @@ export default {
       { text: "Ativo", value: "A" },
       { text: "Inativo", value: "I" },
     ],
-    loadingSalvar: false,
+    loadingSalvarSistemas: false,
     editedIndex: -1,
     editedItem: {
       nome: "",
@@ -198,6 +197,7 @@ export default {
   }),
   methods: {
     editItem(item) {
+      this.loadingSalvarSistemas = false
       this.editedIndex = this.listaItens.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
@@ -239,6 +239,7 @@ export default {
 
     close() {
       this.dialog = false;
+      this.loadingSalvarSistemas = false
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
@@ -256,7 +257,7 @@ export default {
     save() {
       this.$validator.validate("sistema.*").then((result) => {
         if (result) {
-          this.loadingSalvar = true;
+          this.loadingSalvarSistemas = true;
           let url =
             this.editedIndex === -1
               ? "/sistema"
@@ -274,9 +275,11 @@ export default {
           data._method = method;
           data.id_empresa =  (this.role == "Administrador") ? data.id_empresa : this.usuario.id_empresa;        
           data.url = url;
+          this.loadingSalvarSistemas = false
           this.$store
             .dispatch("systems/saveOrUpdate", { data })
             .then(() => {
+              
               this.editedIndex === -1
                 ? this.listaItens.push(this.editedItem)
                 : Object.assign(
@@ -288,6 +291,7 @@ export default {
                 timeout: 3000,
                 text: text,
               });
+              
             })
             .catch((error) => {
               this.$store.dispatch("module/openSnackBar", {

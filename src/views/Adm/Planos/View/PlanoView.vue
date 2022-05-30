@@ -60,7 +60,7 @@
                 <v-list-item @click="registrarAtividade(item)">
                   <v-list-item-title>
                     <v-icon size="20" class="me-2"> mdi-application-edit-outline </v-icon>
-                    <span>Atividades</span>
+                    <span>Tarefas</span>
                   </v-list-item-title>
                 </v-list-item>
 

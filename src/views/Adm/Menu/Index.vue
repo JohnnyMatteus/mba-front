@@ -237,7 +237,7 @@
           </v-card-text>
           <v-card-actions>
             <v-btn color="primary" class="me-3" type="submit">
-              Adicionar
+              Salvar
             </v-btn>
             <v-btn
               color="secondary"

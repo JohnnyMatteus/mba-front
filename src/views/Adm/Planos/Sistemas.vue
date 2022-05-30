@@ -209,9 +209,10 @@ export default {
       this.dialogDelete = true;
     },
 
-    deleteItemConfirm() {      
+    deleteItemConfirm() {     
+      let id = this.editedItem.id
       this.$store
-        .dispatch("systems/removeItem", this.editedItem.id)
+        .dispatch("systems/removeItem", id)
         .then((response) => {
           if (response.data.data === true) {
             this.listaItens.splice(this.editedIndex, 1);
@@ -238,6 +239,7 @@ export default {
     },
 
     close() {
+      this.loadingSalvar= false;
       this.dialog = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);

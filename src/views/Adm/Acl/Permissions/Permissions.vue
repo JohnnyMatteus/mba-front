@@ -164,7 +164,7 @@
               </div>
               <div class="col-6">
                 <v-btn color="primary" class="me-3" type="submit">
-                  Adicionar
+                  Salvar
                 </v-btn>
               </div>
               <div class="col-6">

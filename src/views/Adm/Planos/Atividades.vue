@@ -2,7 +2,7 @@
   <v-dialog v-model="show" persistent max-width="1350px">
     <v-card>
       <v-card-title>
-        <span class="headline">Atividades</span>
+        <span class="headline">Tarefas</span>
       </v-card-title>
       <v-card-text>
         <v-data-table
@@ -20,7 +20,7 @@
                   v-bind="attrs"
                   v-on="on"
                 >
-                  registrar atividade
+                  registrar tarefa
                 </v-btn>
               </template>
               <v-card>
@@ -249,7 +249,7 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="default" outlined @click.stop="show = false">
+        <v-btn color="primary" outlined @click.stop="show = false">
           Fechar
         </v-btn>
       </v-card-actions>
@@ -280,10 +280,10 @@ export default {
       { text: "Ações", value: "actions", sortable: false },
     ],
     itemsStatus: [
-      { text: "Ativo", value: "A" },
-      { text: "Inativo", value: "I" },
+      { text: "A fazer", value: "A" },
+      { text: "Não realizada", value: "I" },
       { text: "Pendente", value: "P" },
-      { text: "Executando", value: "D" },
+      { text: "Realizada", value: "D" },
     ],
     loadingSalvar: false,
     editedIndex: -1,
@@ -421,10 +421,10 @@ export default {
     },
 
     resolveNameStatusVariant(status) {
-      if (status === "D") return "EXECUTANDO";
+      if (status === "D") return "REALIZADA";
       if (status === "P") return "PENDENTE";
-      if (status === "A") return "ATIVO";
-      if (status === "I") return "INATIVO";
+      if (status === "A") return "A FAZER";
+      if (status === "I") return "NÃO REALIZADA";
 
       return "PENDENTE";
     },
@@ -460,7 +460,7 @@ export default {
       );
     },
     formTitle() {
-      return this.editedIndex === -1 ? "Cadastrar sistema" : "Editar sistema";
+      return this.editedIndex === -1 ? "Cadastrar tarefa" : "Editar tarefa";
     },
     listaItens: {
       get() {

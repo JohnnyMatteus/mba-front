@@ -28,24 +28,6 @@
           <p class="mb-2">Comece agora organizar seu empreendimento</p>
         </v-card-text>
 
-        <v-card-text>
-          <v-alert text color="primary">
-            <small class="d-block mb-1">
-              Admin: <strong>admin@manutencao.com</strong> 
-            </small>
-            <small class="d-block mb-1">
-              Construtora: <strong>construtora@manutencao.com</strong> 
-            </small>
-            <small class="d-block mb-1">
-              Sindico: <strong>sindico@manutencao.com</strong> 
-            </small>
-            <small class="d-block mb-1">
-              Senhas: <strong>devomudar</strong>
-            </small>
-              
-          </v-alert>
-        </v-card-text>
-
         <!-- login form -->
         <v-card-text>
           <v-form ref="loginForm" @submit.prevent="handleFormSubmit">
@@ -81,12 +63,9 @@
               @click:append="isPasswordVisible = !isPasswordVisible"
             ></v-text-field>
 
-            <div class="d-flex align-center justify-space-between flex-wrap">
-              <v-checkbox hide-details label="Lembre se mim" class="mt-0">
-              </v-checkbox>
-
+            <div class="d-flex align-center justify-space-between flex-wrap">           
               <!-- forget link -->
-              <router-link :to="{ name: 'auth-forgot-password' }" class="ms-3">
+              <router-link :to="{ name: 'auth-forgot-password' }" class="">
                 Esqueceu a senha?
               </router-link>
             </div>
@@ -138,15 +117,7 @@
     </div>
 
     <!-- background triangle shape  -->
-    <img
-      class="auth-mask-bg"
-      height="173"
-      :src="
-        require(`@/assets/images/misc/mask-${
-          $vuetify.theme.dark ? 'dark' : 'light'
-        }.png`)
-      "
-    />
+    <img class="auth-mask-bg" height="173" :src="require(`@/assets/images/misc/mask-${$vuetify.theme.dark ? 'dark' : 'light'}.png`)"/>
 
     <!-- tree -->
     <v-img
@@ -169,10 +140,7 @@
 <script>
 // eslint-disable-next-line object-curly-newline
 import {
-  mdiFacebook,
-  mdiTwitter,
   mdiGithub,
-  mdiGoogle,
   mdiEyeOutline,
   mdiEyeOffOutline,
 } from "@mdi/js";
@@ -196,27 +164,13 @@ export default {
     const email = ref("");
     const password = ref("");
     const errorMessages = ref([]);
-    const socialLink = [
-      {
-        icon: mdiFacebook,
-        color: "#4267b2",
-        colorInDark: "#4267b2",
-      },
-      {
-        icon: mdiTwitter,
-        color: "#1da1f2",
-        colorInDark: "#1da1f2",
-      },
+    const socialLink = [      
       {
         icon: mdiGithub,
         color: "#272727",
         colorInDark: "#fff",
-      },
-      {
-        icon: mdiGoogle,
-        color: "#db4437",
-        colorInDark: "#db4437",
-      },
+        action: "github"
+      }
     ];
 
     const handleFormSubmit = () => {
@@ -298,10 +252,28 @@ export default {
           loadingBtnLogin.value = false;
         });
     };
+    function validAction(param) {
+      store.dispatch("auth/loginSocial", param)
+      .then(resp => {
+        loadingBtnLogin.value = true;
+        let url = resp.data.data.url
+        if(url)
+        {
+          window.location.href = url
+        }        
+      })
+      .catch(erro => {
+        console.log(erro)
+      })
+      .finally(() => {
+        loadingBtnLogin.value = false
+      })
+      //router.push({"name": "auth-login-github"});
+    }
 
     return {
       handleFormSubmit,
-
+      validAction,
       isPasswordVisible,
       loadingBtnLogin,
       email,

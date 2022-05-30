@@ -375,6 +375,7 @@ export default {
         formData.append('email', this.item.email);
         formData.append('avatar', this.item.avatar); 
         formData.append('password', this.item.password); 
+        formData.append('_method', "PUT"); 
         
         store
         .dispatch("users/editItem", {
