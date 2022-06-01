@@ -5,23 +5,26 @@ export default {
   state: {
     itemsList: [],
     item: [], 
-    indexEdicao: false
+    indexEdicao: false,
+    loading: false
    },
   getters: {
     getItemsList: state => state.itemsList,
     getItem: state => state.item,
-    getIndexEdicao: state => state.indexEdicao
-
+    getIndexEdicao: state => state.indexEdicao,
+    getLoading: state => state.loading
 
   },
   mutations: {
     setItemList: (state, value) => { state.itemsList = value },
     setItem: (state, value) => { state.item = value },
-    setIndexEdicao: (state, value) => { state.indexEdicao = value } 
+    setIndexEdicao: (state, value) => { state.indexEdicao = value }, 
+    setLoading: (state, value) => { state.loading = value } 
 
   },
   actions: {
     fetchItems(ctx) {
+      store.commit('planos/setLoading', true)
       return new Promise((resolve, reject) => {
         axios
           .get('/v1/plano-manutencao')
@@ -29,6 +32,8 @@ export default {
             const dados = response.data.data  
   
             store.commit('planos/setItemList', dados.planos)
+            store.commit('planos/setLoading', false)
+
             return resolve(response)
           })
           .catch(error => reject(error))

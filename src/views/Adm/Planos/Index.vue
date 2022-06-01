@@ -35,7 +35,7 @@
       </template>
       <template slot="data-table">
         <v-data-table
-          :loading="loadingTable"
+          :loading="loadingTabela"
           :headers="computedHeaders"
           :items="listaItens"
           :search="searchTextField"
@@ -513,6 +513,14 @@ export default {
       },
       set(value) {
         this.$store.dispatch("planos/setItemList", value);
+      },
+    },
+    loadingTabela: {
+      get() {
+        return this.$store.getters["planos/getLoading"];
+      },
+      set(value) {
+        this.$store.dispatch("planos/setLoading", value);
       },
     },
   },

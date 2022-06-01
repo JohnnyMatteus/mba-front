@@ -9,6 +9,7 @@
           :headers="headers"
           :items="listaItens"
           class="elevation-1"
+          :loading="loadingTable"
         >
           <template v-slot:top>
             <v-dialog v-model="dialog" max-width="500px">
@@ -292,6 +293,7 @@ export default {
       { text: "Realizada", value: "D" },
     ],
     loadingSalvar: false,
+    loadingTable: false,
     editedIndex: -1,
     menu1: "",
     menu2: "",
@@ -326,6 +328,7 @@ export default {
     },
 
     deleteItemConfirm() {
+      this.loadingTable = true;
       this.$store
         .dispatch("atividades/removeItem", this.editedItem.id)
         .then((response) => {
@@ -337,6 +340,7 @@ export default {
               text: "Registro removido.",
             });
             this.item = {};
+            this.loadingTable = false;
           }
         })
         .catch(() => {
@@ -374,6 +378,7 @@ export default {
       this.$validator.validate("atividade.*").then((result) => {
         if (result) {
           this.loadingSalvar = true;
+          this.loadingTable = true;
           let url =
             this.editedIndex === -1
               ? "/atividade"
@@ -394,6 +399,7 @@ export default {
           this.$store
             .dispatch("atividades/saveOrUpdate", { data })
             .then(() => {
+              this.$store.dispatch("atividades/fetchItems");
               this.editedIndex === -1
                 ? this.listaItens.push(this.editedItem)
                 : Object.assign(
@@ -405,6 +411,7 @@ export default {
                 timeout: 3000,
                 text: text,
               });
+              this.loadingTable = false;
             })
             .catch((error) => {
               this.$store.dispatch("module/openSnackBar", {
@@ -443,7 +450,7 @@ export default {
       val || this.closeDelete();
     },
   },
-  created() {
+  mounted() {
     store.dispatch("atividades/fetchItems");
     this.$store
       .dispatch("providers/fetchItems")

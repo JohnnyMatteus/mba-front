@@ -16,7 +16,7 @@
     >
       <template slot="data-table">
         <v-data-table
-          :loading="loadingTable"
+          :loading="loadingTabela"
           :headers="computedHeaders"
           :items="listaItens"
           :search="searchTextField"
@@ -394,7 +394,7 @@ export default {
           this.$store
             .dispatch("items/saveOrUpdate", { data })
             .then(() => {
-              this.$store.dispatch("items/fetchItems");
+              this.$store.dispatch("items/fetchAtividades");
               this.$store.dispatch("module/openSnackBar", {
                 color: "success",
                 timeout: 3000,
@@ -494,6 +494,14 @@ export default {
     },
     formTitle() {
       return this.edicao === false ? "Cadastrar atividade" : "Editar atividade";
+    },
+    loadingTabela: {
+      get() {
+        return this.$store.getters["items/getLoading"];
+      },
+      set(value) {
+        this.$store.dispatch("items/setLoading", value);
+      },
     },
     listaItens: {
       get() {

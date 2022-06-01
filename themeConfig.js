@@ -9,12 +9,12 @@ const themeConfig = {
     contentLayoutNav: 'vertical', // vertical, horizontal
     routeTransition: 'scroll-x-transition', // https://vuetifyjs.com/en/styles/transitions/#api
     // ! `semi-dark` isn't available for horizontal nav menu
-    skinVariant: 'default', // default, bordered, semi-dark
+    skinVariant: 'semi-dark', // default, bordered, semi-dark
     contentWidth: 'boxed',
   },
   menu: {
     isMenuHidden: false,
-    isVerticalNavMini: false,
+    isVerticalNavMini: true,
     verticalMenuAccordion: true,
     groupChildIcon: mdiCheckboxBlankCircleOutline,
     horizontalNavMenuGroupOpenOnHover: true,
