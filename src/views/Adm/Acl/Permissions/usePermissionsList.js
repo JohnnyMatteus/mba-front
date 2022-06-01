@@ -8,8 +8,8 @@ export default function usePermissionsList() {
   const tableColumns = [
     { text: 'NOME', value: 'name' },
     { text: 'GUARD', value: 'guard_name' },
-    { text: 'DATA CADASTRO', value: 'created_at' },
-    { text: 'DATA ATUALIZAÇÃO', value: 'updated_at' },
+    { text: 'CADASTRO', value: 'created_at' },
+    { text: 'ATUALIZAÇÃO', value: 'updated_at' },
     {
       text: 'AÇÕES',
       value: 'actions',
@@ -20,7 +20,7 @@ export default function usePermissionsList() {
 
   const searchQuery = ref('')
   const totalItemsListTable = ref(0)
-  const loading = ref(false)
+  const loading = ref(true)
   const options = ref({
     sortBy: ['id'],
     sortDesc: [true],

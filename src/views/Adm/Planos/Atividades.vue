@@ -156,6 +156,12 @@
                           accept=".pdf, .doc, .docx"
                           outlined
                           dense
+                          :hint="errors.first('arquivo')"
+                          :error="errors.collect('arquivo').length ? true : false"
+                          v-validate="'required'"
+                          data-vv-scope="atividade"
+                          data-vv-validate-on="change"
+                          data-vv-as="arquivo"
                         ></v-file-input>
                       </div>
                       <v-col cols="12">

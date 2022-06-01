@@ -8,6 +8,7 @@
         <v-data-table
           :headers="headers"
           :items="listaItens"
+          :loading="loadingTable"
           class="elevation-1"
         >
           <template v-slot:top>
@@ -78,7 +79,12 @@
                           label="Status"
                         ></v-select>
                       </v-col>
-                      <div class="col-12" sm="12" md="12" v-if="papel == 'Administrador'">
+                      <div
+                        class="col-12"
+                        sm="12"
+                        md="12"
+                        v-if="papel == 'Administrador'"
+                      >
                         <v-select
                           :items="listaEmpresas"
                           dense
@@ -105,15 +111,8 @@
 
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="close">
-                    Fechar
-                  </v-btn>
-                  <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="save"
-                    :loading="loadingSalvar"
-                  >
+                  <v-btn color="secondary" @click="close"> Fechar </v-btn>
+                  <v-btn color="success" @click="save" :loading="loadingSalvar">
                     salvar
                   </v-btn>
                 </v-card-actions>
@@ -121,9 +120,14 @@
             </v-dialog>
             <v-dialog v-model="dialogDelete" max-width="500px">
               <v-card>
-                <v-card-title class="text-h5"
-                  >Tem certeza de que deseja excluir este item?</v-card-title
-                >
+                <v-card-title class="text-h5">Excluir registro</v-card-title>
+                <v-card-subtitle>
+                  <p>
+                    Atenção! Você está prestes a realizar uma ação que não pode
+                    ser desfeita.
+                  </p>
+                  <p>Você realmente deseja excluir esse registro?</p>
+                </v-card-subtitle>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="blue darken-1" text @click="closeDelete"
@@ -137,14 +141,49 @@
               </v-card>
             </v-dialog>
           </template>
-          <template v-slot:item.actions="{ item }">
-            <v-icon small class="mr-2" @click="editItem(item)">
-              mdi-pencil
-            </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+          <template #[`item.status`]="{ item }">
+            <v-chip
+              small
+              :color="resolveStatusVariant(item.status)"
+              :class="`${resolveStatusVariant(item.status)}--text`"
+              class="v-chip-light-bg font-weight-semibold text-capitalize"
+            >
+              {{ resolveNameStatusVariant(item.status) }}
+            </v-chip>
+          </template>
+          <template #[`item.actions`]="{ item }">
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  color="warning"
+                  class="mr-2"
+                  small
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="editItem(item)"
+                >
+                  <v-icon> mdi-pencil </v-icon>
+                </v-btn>
+              </template>
+              <span>Editar</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  color="error"
+                  small
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="deleteItem(item)"
+                >
+                  <v-icon small> mdi-delete </v-icon>
+                </v-btn>
+              </template>
+              <span>Apagar</span>
+            </v-tooltip>
           </template>
           <template v-slot:no-data>
-            <v-btn color="primary" @click="initialize"> Reiniciar </v-btn>
+            <v-btn color="primary" @click="initialize()"> Reiniciar </v-btn>
           </template>
         </v-data-table>
       </v-card-text>
@@ -187,6 +226,7 @@ export default {
       id_empresa: "",
     },
     loadingSalvar: false,
+    loadingTable: false,
     defaultItem: {
       nome: "",
       descricao: "",
@@ -195,6 +235,10 @@ export default {
     listaEmpresas: [],
   }),
   methods: {
+    initialize() {
+      this.$store.dispatch("components/fetchItems");
+    },
+
     editItem(item) {
       this.editedIndex = this.listaItens.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -208,6 +252,7 @@ export default {
     },
 
     deleteItemConfirm() {
+      this.loadingTable = true;
       this.$store
         .dispatch("components/removeItem", this.editedItem.id)
         .then((response) => {
@@ -255,6 +300,7 @@ export default {
       this.$validator.validate("equipamento.*").then((result) => {
         if (result) {
           this.loadingSalvar = true;
+          this.loadingTable = true;
           let url =
             this.editedIndex === -1
               ? "/componente"
@@ -270,7 +316,7 @@ export default {
               : "Erro ao atualizar item.";
           let data = this.editedItem;
           data._method = method;
-          data.id_empresa =  (this.role == "Administrador") ? data.id_empresa : this.usuario.id_empresa;        
+          //data.id_empresa =  (this.role == "Administrador") ? data.id_empresa : this.usuario.id_empresa;
           data.url = url;
           this.$store
             .dispatch("components/saveOrUpdate", { data })
@@ -281,6 +327,7 @@ export default {
                     this.listaItens[this.editedIndex],
                     this.editedItem
                   );
+              this.$store.dispatch("components/fetchItems");
               this.$store.dispatch("module/openSnackBar", {
                 color: "success",
                 timeout: 3000,
@@ -296,6 +343,7 @@ export default {
             })
             .finally(() => {
               this.loadingSalvar = false;
+              this.loadingTable = false;
               this.close();
             });
         } else {
@@ -306,6 +354,21 @@ export default {
           });
         }
       });
+    },
+
+    resolveStatusVariant(status) {
+      if (status === "P") return "warning";
+      if (status === "A") return "success";
+      if (status === "I") return "secondary";
+
+      return "warning";
+    },
+    resolveNameStatusVariant(status) {
+      if (status === "P") return "PENDENTE";
+      if (status === "A") return "ATIVO";
+      if (status === "I") return "INATIVO";
+
+      return "PENDENTE";
     },
   },
   watch: {
@@ -353,14 +416,14 @@ export default {
     },
     usuario: {
       get() {
-        return this.$store.getters['auth/getUsuario']
-      }
+        return this.$store.getters["auth/getUsuario"];
+      },
     },
     papel: {
       get() {
-        return this.$store.getters['auth/getRole']
-      }
-    }
+        return this.$store.getters["auth/getRole"];
+      },
+    },
   },
 };
 </script>

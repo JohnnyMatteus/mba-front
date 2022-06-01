@@ -8,8 +8,8 @@ export default function useEmpresasList() {
     { text: 'NOME', value: 'name' },
     { text: 'CONTATOS', value: 'fone' },
     { text: 'STATUS', value: 'status' },
-    { text: 'DATA CADASTRO', value: 'created_at' },
-    { text: 'DATA ATUALIZAÇÃO', value: 'updated_at' },
+    { text: 'CADASTRO', value: 'created_at' },
+    { text: 'ATUALIZAÇÃO', value: 'updated_at' },
     {
       text: 'AÇÕES',
       value: 'actions',
@@ -20,7 +20,7 @@ export default function useEmpresasList() {
 
   const searchQuery = ref('')
   const totalItemsListTable = ref(0)
-  const loading = ref(false)
+  const loading = ref(true)
   const options = ref({
     sortBy: ['id'],
     sortDesc: [true],
@@ -30,6 +30,7 @@ export default function useEmpresasList() {
 
   // fetch data
   const fetchItems = () => {
+    loading.value = true
     store
     .dispatch('app-empresas/fetchItems')
     .then(response => {

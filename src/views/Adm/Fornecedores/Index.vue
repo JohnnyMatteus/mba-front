@@ -25,6 +25,7 @@
                     v-bind="attrs"
                     v-on="on"
                     class="mb-4"
+                    :loading="loadingControl.loadingBtnExport"
                   >
                     <v-icon size="17" class="me-1">
                       mdi-export-variant
@@ -253,6 +254,7 @@ export default {
       loadingControl: {
         dataTable: false,
         loadingSalvar: false,
+        loadingBtnExport: false
       },
       headers: [
         { text: "Nome", value: "nome", sortable: true, hide: "smAndDown" },
@@ -310,10 +312,8 @@ export default {
       indexEdicao: 0,
       edicao: false, 
       MenuExport:[
-
         {title: 'PDF', type: 'pdf', icon: 'mdi-file-pdf-box'}, 
-        {title: 'CSV', type: 'csv', icon: 'mdi-file-excel'}
-      
+        {title: 'CSV', type: 'csv', icon: 'mdi-file-excel'}      
       ]
     };
   },
@@ -333,8 +333,9 @@ export default {
     salvar() {
       this.$validator.validate("fornecedor.*").then((result) => {
         if (result) {
-          this.loadingExcluir = true;
-          this.loadingSalvar = true;
+          console.log(this.objetoEdicao)
+          this.loadingControl.loadingExcluir = true;
+          this.loadingControl.loadingSalvar = true;
           let url =
             this.edicao === false ? "/fornecedor" : "/fornecedor/" + this.objetoEdicao.id;
           let method = this.edicao === false ? "POST" : "PUT";
@@ -345,12 +346,13 @@ export default {
               ? "Erro ao salvar item."
               : "Erro ao atualizar item.";
           let data = this.objetoEdicao;          
-          data.id_empresa =  (this.role == "Administrador") ? data.id_empresa : this.usuario.id_empresa;        
+         // data.id_empresa =  (this.role == "Administrador") ? data.id_empresa : this.usuario.id_empresa;        
           data._method = method;
           data.url = url;
           this.$store
             .dispatch("providers/saveOrUpdate", { data })
             .then(() => {
+              store.dispatch("providers/fetchItems");
               this.edicao === false
                 ? this.listaItens.push(this.objetoEdicao)
                 : Object.assign(
@@ -394,7 +396,8 @@ export default {
         this.$store
           .dispatch("providers/removeItem", this.item.id)
           .then((response) => {
-            if (response.data.data === true) {            
+            if (response.data.data === true) {  
+              store.dispatch("providers/fetchItems");          
               this.listaItens.pop(this.indexEdicao);
               this.$store.dispatch("module/openSnackBar", {
                 color: "success",
@@ -437,6 +440,7 @@ export default {
       return 'PENDENTE'
     },
     resolvedExport(type) {
+        this.loadingControl.loadingBtnExport = true
         this.$store
         .dispatch('providers/downloadExport', type)
         .then(response => {
@@ -451,6 +455,9 @@ export default {
         })
         .catch(error => {
           console.log(error)
+        })
+        .finally(() => {
+          this.loadingControl.loadingBtnExport = false
         })
     }
   },

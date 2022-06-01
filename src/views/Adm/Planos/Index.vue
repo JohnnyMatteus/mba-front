@@ -285,7 +285,7 @@ export default {
       image: logo,
       searchTextField: "",
       dialog: false,
-      loadingTable: false,
+      loadingTable: true,
       loadingControl: {
         dataTable: false,
       },
@@ -375,6 +375,7 @@ export default {
       this.$validator.validate("plano.*").then((result) => {
         if (result) {
           this.loadingSalvar = true;
+          this.loadingTable = true;
           let url =
             this.edicao === false
               ? "/plano-manutencao"
@@ -392,6 +393,7 @@ export default {
           data.id_empresa = this.objetoEdicao.empreendimento.id_empresa;
           data.id_empreendimento = this.objetoEdicao.empreendimento.id;
           delete data.empreendimento;
+          
           this.$store
             .dispatch("planos/saveOrUpdate", { data })
             .then(() => {
@@ -401,6 +403,7 @@ export default {
                     this.listaItens[this.indexEdicao],
                     this.objetoEdicao
                   );
+              this.$store.dispatch("planos/fetchItems");
               this.$store.dispatch("module/openSnackBar", {
                 color: "success",
                 timeout: 3000,
@@ -415,6 +418,7 @@ export default {
               });
             })
             .finally(() => {
+              this.loadingTable = false;
               this.fechar();
             });
         } else {
@@ -444,6 +448,7 @@ export default {
                 timeout: 3000,
                 text: "Registro removido.",
               });
+              this.$store.dispatch("planos/fetchItems");
               this.item = {};
             }
           })
@@ -511,11 +516,12 @@ export default {
       },
     },
   },
-  created() {
+  created() {    
     this.$store.dispatch("planos/fetchItems");
     this.$store.dispatch("empreendimentos/fetchIndexItems").then((response) => {
       this.listaEmpreendimentos = response.data.data.empreendimento;
     });
+    this.loadingTable = false;
   },
 };
 </script>

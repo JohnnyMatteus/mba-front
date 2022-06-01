@@ -9,7 +9,7 @@
       <v-card-text class="d-flex align-center flex-wrap pb-0">
         <!-- search -->
         <v-text-field
-          v-model="searchQuery"
+          v-model="search"
           placeholder="Pesquisar"
           outlined
           hide-details
@@ -17,62 +17,21 @@
           class="user-search me-3 mb-4"
         >
         </v-text-field>
-
         <v-spacer></v-spacer>
-
         <div class="d-flex align-center flex-wrap">
           <v-btn color="primary" class="mb-4 me-3" @click.stop="insert()">
             <v-icon>{{ icons.mdiPlus }}</v-icon>
             <span>Novo papel</span>
           </v-btn>
-
-          <v-menu bottom left>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="secondary"
-                outlined
-                v-bind="attrs"
-                v-on="on"
-                class="mb-4"
-              >
-                <v-icon size="17" class="me-1">
-                  {{ icons.mdiExportVariant }}
-                </v-icon>
-                <span>Exportar</span>
-              </v-btn>
-            </template>
-
-            <v-list>
-              <v-list-item>
-                <v-list-item-title>
-                  <v-icon size="20" class="me-2">
-                    {{ icons.mdiFilePdfBox }}
-                  </v-icon>
-                  <span>PDF</span>
-                </v-list-item-title>
-              </v-list-item>
-
-              <v-list-item>
-                <v-list-item-title>
-                  <v-icon size="20" class="me-2">
-                    {{ icons.mdiFileExcel }}
-                  </v-icon>
-                  <span>Excel</span>
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
         </div>
       </v-card-text>
 
       <!-- table -->
       <v-data-table
-        v-model="selectedRows"
         :headers="tableColumns"
         :items="rolesListTable"
-        :server-items-length="totalRoleListTable"
         :loading="loading"
-        show-select
+        :search="search"
       >
         <!-- created_at -->
         <template #[`item.created_at`]="{ item }">
@@ -294,14 +253,13 @@ export default {
     const role = ref({
       name: ''
     });
-    
+    const search = ref("");
     const dialogRemove = ref(false)
     const selectedPermission = ref([]);
     const isAddPapel = ref(false);
     const {
       rolesListTable,
       tableColumns,
-      searchQuery,
       totalRoleListTable,
       loading,
       options,
@@ -412,7 +370,7 @@ export default {
     return {
       rolesListTable,
       tableColumns,
-      searchQuery,
+      search,
       totalRoleListTable,
       roleTotalLocal,
       loading,

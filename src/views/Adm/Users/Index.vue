@@ -36,6 +36,7 @@
                     v-bind="attrs"
                     v-on="on"
                     class="mb-4"
+                     :loading="loadingBtnExport"
                   >
                     <v-icon size="17" class="me-1">
                       {{ icons.mdiExportVariant }}
@@ -45,7 +46,7 @@
                 </template>
                 <v-list>
                   <v-list-item v-for="(item, index) in MenuExport" :key="index">
-                    <v-list-item-title  @click.stop="resolvedExport(item.type)">
+                    <v-list-item-title @click.stop="resolvedExport(item.type)">
                       <v-icon size="15" class="me-2">
                         {{ item.icon }}
                       </v-icon>
@@ -66,8 +67,16 @@
         :items="itemsListTable"
         :loading="loading"
         :search="search"
-        show-select
       >
+        <!-- Role -->
+        <template #[`item.name`]="{ item }">
+          <div class="d-flex align-center">
+            <div class="d-flex flex-column ms-3">              
+              {{ item.name }}
+              <small>{{ item.email }}</small>
+            </div>
+          </div>
+        </template>
         <!-- Role -->
         <template #[`item.role`]="{ item }">
           <div class="d-flex align-center">
@@ -370,10 +379,13 @@ export default {
       empreendimentos: [],
       role: "",
     });
-    const MenuExport = [{title: 'PDF', type: 'pdf', icon: mdiFilePdfBox}, {title: 'CSV', type: 'csv', icon: mdiFileExcel}];
+    const MenuExport = [
+      { title: "PDF", type: "pdf", icon: mdiFilePdfBox },
+      { title: "CSV", type: "csv", icon: mdiFileExcel },
+    ];
 
     const dialogRemove = ref(false);
-
+    const loadingBtnExport = ref(false)
     const isAddItem = ref(false);
     const {
       itemsListTable,
@@ -430,21 +442,28 @@ export default {
     }
     function resetPassword(item) {}
     function resolvedExport(type) {
-          store
-          .dispatch('app-usuarios/downloadExport', type)
-          .then(response => {
-            let file = (type == 'pdf') ? "application/pdf" : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            console.log(response.data);
-            const blob = new Blob([response.data], { type: file })
-            const link = document.createElement('a')
-            link.href = URL.createObjectURL(blob)
-            link.download = 'lista_usuarios'
-            link.click()
-            URL.revokeObjectURL(link.href)
-          })
-          .catch(error => {
-            console.log(error)
-          })
+      loadingBtnExport.value = true
+      store
+        .dispatch("app-usuarios/downloadExport", type)
+        .then((response) => {
+          let file =
+            type == "pdf"
+              ? "application/pdf"
+              : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+         
+          const blob = new Blob([response.data], { type: file });
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = "lista_usuarios";
+          link.click();
+          URL.revokeObjectURL(link.href);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+        loadingBtnExport.value = false
+      })
     }
     const validate = () => {
       form.value.validate();
@@ -497,6 +516,7 @@ export default {
       empreendimentos,
       search,
       totalItemsListTable,
+      loadingBtnExport,
       loading,
       options,
       isAddItem,
@@ -548,7 +568,7 @@ export default {
         mdiCheckboxBlankOutline,
         mdiFoodAppleOutline,
       },
-      MenuExport
+      MenuExport,
     };
   },
 };

@@ -91,6 +91,13 @@
         </p>
         <p>Você realmente deseja excluir esse registro?</p>
       </template>
+      <template slot="modalDelete/contentModal">
+        <p>
+          Atenção! Você está prestes a realizar uma ação que não pode ser
+          desfeita.
+        </p>
+        <p>Você realmente deseja excluir esse registro?</p>
+      </template>
       <template slot="modalDelete/actionsModal">
         <v-btn depressed @click="dialogDelete = false">Fechar</v-btn>
         <v-btn color="error" @click="remover()">Excluir</v-btn>
@@ -364,6 +371,7 @@ export default {
       this.$validator.validate("plano.*").then((result) => {
         if (result) {
           this.loadingSalvar = true;
+          this.loadingTable = true;
           let url =
             this.edicao === false
               ? "/item-plano-manutencao"
@@ -383,12 +391,7 @@ export default {
           this.$store
             .dispatch("items/saveOrUpdate", { data })
             .then(() => {
-              this.edicao === false
-                ? this.listaItens.push(this.objetoEdicao)
-                : Object.assign(
-                    this.listaItens[this.indexEdicao],
-                    this.objetoEdicao
-                  );
+              this.$store.dispatch("items/fetchItems");
               this.$store.dispatch("module/openSnackBar", {
                 color: "success",
                 timeout: 3000,
@@ -404,6 +407,7 @@ export default {
             })
             .finally(() => {
               this.fechar();
+              this.loadingTable = false;
             });
         } else {
           this.$store.dispatch("module/openSnackBar", {

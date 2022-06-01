@@ -16,12 +16,11 @@ export default function useUsuariosList() {
   const itemsListTable = ref([])
 
   const tableColumns = [
-    { text: 'USUARIO', value: 'name' },
-    { text: 'EMAIL', value: 'email' },
-    { text: 'PAPEL', value: 'role', sortable: false },
+    { text: 'USUÁRIO', value: 'name' },
+    { text: 'FUNÇÃO', value: 'role', sortable: false },
     { text: 'STATUS', value: 'status' },
-    { text: 'DATA CADASTRO', value: 'created_at' },
-    { text: 'DATA ATUALIZAÇÃO', value: 'updated_at' },
+    { text: 'CADASTRO', value: 'created_at' },
+    { text: 'ATUALIZAÇÃO', value: 'updated_at' },
     {
       text: 'AÇÕES',
       value: 'actions',
@@ -31,7 +30,7 @@ export default function useUsuariosList() {
   ]
   const searchQuery = ref('')
   const totalItemsListTable = ref(0)
-  const loading = ref(false)
+  const loading = ref(true)
   const options = ref({
     sortBy: ['id'],
     sortDesc: [true],

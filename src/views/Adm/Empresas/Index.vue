@@ -36,6 +36,7 @@
                     v-bind="attrs"
                     v-on="on"
                     class="mb-4"
+                    :loading="loadingBtnExport"
                   >
                     <v-icon size="17" class="me-1">
                       {{ icons.mdiExportVariant }}
@@ -66,7 +67,6 @@
         :items="itemsListTable"
         :loading="loading"
         :search="search"
-        show-select
       >
         <!-- name -->
         <template #[`item.name`]="{item}">
@@ -404,7 +404,7 @@ export default {
         site: "", 
         slug: "",
     });
-
+    const loadingBtnExport = ref(false)
     const dialogRemove = ref(false);
     const MenuExport = [{title: 'PDF', type: 'pdf', icon: mdiFilePdfBox}, {title: 'CSV', type: 'csv', icon: mdiFileExcel}];
     const isAddItem = ref(false);
@@ -439,14 +439,15 @@ export default {
       this.dialogRemove = true;
     }
     function removerItem() {
+      loading.value = true
       store.dispatch("app-empresas/removeItem", this.itemData.id).then(() => {
-        this.dialogRemove = false;
-        fetchItems();
         store.dispatch("module/openSnackBar", {
           color: "success",
           timeout: 10000,
           text: "Item removido com sucesso.",
         });
+        this.dialogRemove = false;
+        fetchItems();
       });
     }
     function closeModalRemover() {
@@ -462,6 +463,7 @@ export default {
       form.value.validate();
     };
     const onSubmit = () => {
+      loading.value = true
        if (valid.value) {
         (item.value.access_name) ? item.value.access_name = item.value.slug : item.value.access_name
         const formData = new FormData();
@@ -472,7 +474,7 @@ export default {
         formData.append('cell', item.value.cell);
         formData.append('status', item.value.status);
         formData.append('logo', item.value.logo);
-        formData.append('access_name', item.value.access_name);
+        formData.append('access_name', item.value.slug);
         formData.append('description', item.value.description);
         formData.append('email', item.value.email);
         formData.append('name_responsible', item.value.name_responsible);
@@ -508,11 +510,11 @@ export default {
       }
     };
     function resolvedExport(type) {
+      loadingBtnExport.value = true
       store
       .dispatch('app-empresas/downloadExport', type)
       .then(response => {
         let file = (type == 'pdf') ? "application/pdf" : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        console.log(response.data);
         const blob = new Blob([response.data], { type: file })
         const link = document.createElement('a')
         link.href = URL.createObjectURL(blob)
@@ -523,12 +525,16 @@ export default {
       .catch(error => {
         console.log(error)
       })
+      .finally(() => {
+        loadingBtnExport.value = false
+      })
     }
     return {
       itemsListTable,
       tableColumns,
       search,
       totalItemsListTable,
+      loadingBtnExport,
       loading,
       options,
       isAddItem,

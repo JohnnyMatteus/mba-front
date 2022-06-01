@@ -36,6 +36,7 @@
                     v-bind="attrs"
                     v-on="on"
                     class="mb-4"
+                    :loading="loadingBtnExport"
                   >
                     <v-icon size="17" class="me-1">
                       {{ icons.mdiExportVariant }}
@@ -65,8 +66,7 @@
         :headers="tableColumns"
         :items="itemsListTable"
         :loading="loading"
-        :search="search"
-        show-select
+        :search="search"  
       >
         <!-- name -->
         <template #[`item.name`]="{item}">
@@ -132,12 +132,12 @@
         <template #[`item.actions`]="{ item }">
           <v-menu bottom left>
             <template v-slot:activator="{ on, attrs }" >
-              <v-btn icon v-bind="attrs" v-on="on" v-show="item.id != 1">
+              <v-btn icon v-bind="attrs" v-on="on">
                 <v-icon>{{ icons.mdiDotsVertical }}</v-icon>
               </v-btn>
             </template>
 
-            <v-list v-show="item.id != 1">
+            <v-list>
               <!-- <v-list-item @click="show(item)">
                 <v-list-item-title>
                   <v-icon size="20" class="me-2">
@@ -381,7 +381,7 @@ export default {
     const empresasList = computed(() => store.getters["app-empreendimentos/getEmpresasList"]);
     const role = computed(() => store.getters['auth/getRole']);
     const usuario = computed(() => store.getters['auth/getUsuario']);
-
+    const loadingBtnExport = ref(false)
     const indexEdicao = ref(false);
     const itemData = reactive({});
     const valid = ref(false);
@@ -453,11 +453,11 @@ export default {
       isAddItem.value = false;
     }
     function resolvedExport(type) {
+      loadingBtnExport.value = true
       store
       .dispatch('app-empreendimentos/downloadExport', type)
       .then(response => {
         let file = (type == 'pdf') ? "application/pdf" : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        console.log(response.data);
         const blob = new Blob([response.data], { type: file })
         const link = document.createElement('a')
         link.href = URL.createObjectURL(blob)
@@ -467,6 +467,9 @@ export default {
       })
       .catch(error => {
         console.log(error)
+      })
+      .finally(() => {
+        loadingBtnExport.value = false
       })
     }
     const MenuExport = [{title: 'PDF', type: 'pdf', icon: mdiFilePdfBox}, {title: 'CSV', type: 'csv', icon: mdiFileExcel}];
@@ -495,6 +498,7 @@ export default {
               text: "Item salvo com sucesso.",
             });
             fetchItems();
+            closeModal();
           });          
         } else {
           store
@@ -508,9 +512,11 @@ export default {
                 timeout: 10000,
                 text: "Item atualizado com sucesso.",
               });
+              fetchItems();
+              closeModal();
             });
         }        
-        closeModal();
+        
       } else {
         validate();
       }
@@ -520,6 +526,7 @@ export default {
       itemsListTable,
       tableColumns,
       search,
+      loadingBtnExport,
       totalItemsListTable,
       loading,
       options,

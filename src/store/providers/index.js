@@ -55,6 +55,7 @@ export default {
       })
     },
     saveOrUpdate(ctx, dados) {
+      console.log(dados)
       return new Promise((resolve, reject) => {
         axios
           .post(`/v1${dados.data.url}`, dados.data )

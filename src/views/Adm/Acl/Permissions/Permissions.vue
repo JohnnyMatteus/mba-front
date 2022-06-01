@@ -9,7 +9,7 @@
       <v-card-text class="d-flex align-center flex-wrap pb-0">
         <!-- search -->
         <v-text-field
-          v-model="searchQuery"
+          v-model="search"
           placeholder="Pesquisar"
           outlined
           hide-details
@@ -25,54 +25,15 @@
             <v-icon>{{ icons.mdiPlus }}</v-icon>
             <span>Nova permissão</span>
           </v-btn>
-
-          <v-menu bottom left>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="secondary"
-                outlined
-                v-bind="attrs"
-                v-on="on"
-                class="mb-4"
-              >
-                <v-icon size="17" class="me-1">
-                  {{ icons.mdiExportVariant }}
-                </v-icon>
-                <span>Exportar</span>
-              </v-btn>
-            </template>
-
-            <v-list>
-              <v-list-item>
-                <v-list-item-title>
-                  <v-icon size="20" class="me-2">
-                    {{ icons.mdiFilePdfBox }}
-                  </v-icon>
-                  <span>PDF</span>
-                </v-list-item-title>
-              </v-list-item>
-
-              <v-list-item>
-                <v-list-item-title>
-                  <v-icon size="20" class="me-2">
-                    {{ icons.mdiFileExcel }}
-                  </v-icon>
-                  <span>Excel</span>
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
         </div>
       </v-card-text>
 
       <!-- table -->
       <v-data-table
-        v-model="selectedRows"
         :headers="tableColumns"
         :items="itemsListTable"
-        :server-items-length="totalItemsListTable"
         :loading="loading"
-        show-select
+        :search="search"
       >
         <!-- created_at -->
         <template #[`item.created_at`]="{ item }">
@@ -92,15 +53,6 @@
             </template>
 
             <v-list>
-             <!-- <v-list-item @click="show(item)">
-                <v-list-item-title>
-                  <v-icon size="20" class="me-2">
-                    {{ icons.mdiEyeOutline }}
-                  </v-icon>
-                  <span>visualizar</span>
-                </v-list-item-title>
-              </v-list-item> -->
-
               <v-list-item @click.stop="edit(item)">
                 <v-list-item-title>
                   <v-icon size="20" class="me-2">
@@ -257,15 +209,13 @@ export default {
     const item = ref({
       name: ''
     });
-    
+    const search = ref("");
     const dialogRemove = ref(false)
  
     const isAddItem = ref(false);
     const { 
       itemsListTable,    
       tableColumns,
-      searchQuery,
-      totalItemsListTable,
       loading,
       options,
       selectedRows,
@@ -327,6 +277,8 @@ export default {
                 timeout: 10000,
                 text: "Item salvo com sucesso.",
               });
+              fetchItems();        
+              closeModal();
             });
           } else {
             store.dispatch("app-permissoes/editItem",{ id:item.value.id, dados: data}).then(() => {
@@ -335,10 +287,10 @@ export default {
                 timeout: 10000,
                 text: "Item atualizado com sucesso.",
               });
-            });
+              fetchItems();        
+              closeModal();
+            });          
           }  
-          fetchItems();        
-          closeModal();
         } else {
           validate();
         }
@@ -346,9 +298,7 @@ export default {
     return {
       itemsListTable,
       tableColumns,
-      searchQuery,
-      totalItemsListTable,
-     
+      search,     
       loading,
       options,
       isAddItem,
