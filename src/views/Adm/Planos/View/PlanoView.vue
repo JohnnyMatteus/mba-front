@@ -108,27 +108,6 @@
         <v-row>
           <v-col cols="12" md="6">
             <v-select
-              :items="itemsEquipamentos"
-              item-text="nome"
-              item-value="id"
-              outlined
-              dense
-              label="Equipamento"
-              id="id_componente"
-              name="id_componente"
-              persistent-hint
-              v-model="objetoEdicao.id_componente"
-              :hint="errors.first('id_componente')"
-              :error="errors.collect('id_componente').length ? true : false"
-              v-validate="'required'"
-              data-vv-scope="plano"
-              data-vv-validate-on="change"
-              data-vv-as="id_componente"
-            ></v-select>
-          </v-col>
-
-          <v-col cols="12" md="6">
-            <v-select
               :items="itemsSistemas"
               item-text="nome"
               item-value="id"
@@ -145,6 +124,27 @@
               data-vv-scope="plano"
               data-vv-validate-on="change"
               data-vv-as="id_sistema"
+            ></v-select>
+          </v-col>
+          
+          <v-col cols="12" md="6">
+            <v-select
+              :items="itemsEquipamentos"
+              item-text="nome"
+              item-value="id"
+              outlined
+              dense
+              label="Equipamento"
+              id="id_componente"
+              name="id_componente"
+              persistent-hint
+              v-model="objetoEdicao.id_componente"
+              :hint="errors.first('id_componente')"
+              :error="errors.collect('id_componente').length ? true : false"
+              v-validate="'required'"
+              data-vv-scope="plano"
+              data-vv-validate-on="change"
+              data-vv-as="id_componente"
             ></v-select>
           </v-col>
 
