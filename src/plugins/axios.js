@@ -13,8 +13,8 @@ const axiosIns = axios.create({
 
 if (token != undefined)
 {
-  axiosIns.defaults.headers.common["Authorization"] = "Bearer " + token
-  axios.defaults.headers.common["Authorization"] = "Bearer " + token
+  axiosIns.defaults.headers.common["Authorization"] = `Bearer ${token}`
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
 }
 
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";

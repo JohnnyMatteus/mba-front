@@ -67,10 +67,15 @@ export default {
     },
     fetchDataDashboad(ctx) {
       return new Promise((resolve, reject) => {
+        const token = localStorage.getItem('accessToken')
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;    
         axios
           .get('/v1/dashboard/administrativo')
           .then(response => resolve(response))
-          .catch(error => reject(error))
+          .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     }
   },

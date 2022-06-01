@@ -329,7 +329,7 @@ import {
 } from "@mdi/js";
 import StatisticsCardWithImages from "@/components/StatisticsCardWithImages.vue";
 import { getVuetify, addAlpha } from "@core/utils";
-import { onMounted, ref } from "@vue/composition-api";
+import { onBeforeMount, ref } from "@vue/composition-api";
 
 export default {
   name: "Dashboard-Administrativo",
@@ -415,7 +415,6 @@ export default {
       });
       
     };   
-
     const resolveValueGraficVariation = (data) => {
       totalAtividadesSemanal.value = data.length
       data.forEach(el => {        
@@ -441,7 +440,6 @@ export default {
         return object; 
       },{}));
     };
-
     const chartOptions = {
       labels: [
         "ATIVOS",
@@ -554,7 +552,7 @@ export default {
       },
     };
 
-    onMounted(() => {});
+    
 
     return {
       ratingsOptions,
