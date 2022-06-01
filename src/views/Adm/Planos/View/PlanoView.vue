@@ -400,6 +400,7 @@ export default {
                 timeout: 3000,
                 text: text,
               });
+              this.loadingSalvar = false;
             })
             .catch((error) => {
               this.$store.dispatch("module/openSnackBar", {
