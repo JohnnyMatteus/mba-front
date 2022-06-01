@@ -32,7 +32,10 @@ export default {
         axios
           .get('/v1/acl/role')
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
     fetchRole(ctx, { id }) {
@@ -40,7 +43,10 @@ export default {
         axios
           .get(`/v1/acl/role/${id}`)
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
     addRole(ctx, dados) {
@@ -48,7 +54,10 @@ export default {
         axios
           .post('/v1/acl/role', dados )
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
     editRole(ctx, {id, dados}) {
@@ -56,7 +65,10 @@ export default {
         axios
           .put(`/v1/acl/role/${id}`, dados)
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
     removeRole(ctx, id ) {
@@ -64,7 +76,10 @@ export default {
         axios
           .delete(`/v1/acl/role/${id}`)
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
   },

@@ -35,7 +35,10 @@ export default {
             store.commit('providers/setListaEmpresas', dados.empresas)
             return resolve(response)
           })
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
     fetchItem(ctx, { id }) {
@@ -43,7 +46,10 @@ export default {
         axios
           .get(`/v1/sistema/${id}`)
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
     addItem(ctx, dados) {
@@ -51,7 +57,10 @@ export default {
         axios
           .post('/v1/sistema', dados )
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
     saveOrUpdate(ctx, dados) {
@@ -59,7 +68,10 @@ export default {
         axios
           .post(`/v1${dados.data.url}`, dados.data )
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
     editItem(ctx, {id, dados}) {
@@ -67,7 +79,10 @@ export default {
         axios
           .put(`/v1/sistema/${id}`, dados)
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
     removeItem(ctx, id ) {
@@ -75,7 +90,10 @@ export default {
         axios
           .delete(`/v1/sistema/${id}`)
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
   },

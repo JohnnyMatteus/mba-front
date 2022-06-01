@@ -33,7 +33,10 @@ export default {
             store.commit('items/setItemList', dados.itens)
             return resolve(response)
           })
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
     fetchItem(ctx, { id }) {
@@ -41,7 +44,10 @@ export default {
         axios
           .get(`/v1/item-plano-manutencao/${id}`)
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
     fetchAtividades(ctx, id) {
@@ -55,7 +61,10 @@ export default {
             store.commit('items/setLoading', false)
             return resolve(response)
           })
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
     addItem(ctx, dados) {
@@ -63,7 +72,10 @@ export default {
         axios
           .post('/v1/item-plano-manutencao', dados )
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
     saveOrUpdate(ctx, dados) {
@@ -71,7 +83,10 @@ export default {
         axios
           .post(`/v1${dados.data.url}`, dados.data )
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
     editItem(ctx, {id, dados}) {
@@ -79,7 +94,10 @@ export default {
         axios
           .put(`/v1/item-plano-manutencao/${id}`, dados)
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
     removeItem(ctx, id ) {
@@ -87,7 +105,10 @@ export default {
         axios
           .delete(`/v1/item-plano-manutencao/${id}`)
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
   },

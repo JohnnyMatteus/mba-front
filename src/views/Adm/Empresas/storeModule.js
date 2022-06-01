@@ -27,7 +27,10 @@ export default {
         axios
           .get('/v1/empresas/initialize')
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
     fetchItem(ctx, { id }) {
@@ -35,7 +38,10 @@ export default {
         axios
           .get(`/v1/empresas/${id}`)
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
     addItem(ctx, dados) {
@@ -43,7 +49,10 @@ export default {
         axios
           .post('/v1/empresas', dados )
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
     editItem(ctx, {id, dados}) {
@@ -51,7 +60,10 @@ export default {
         axios
           .put(`/v1/empresas/${id}`, dados)
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
     removeItem(ctx, id ) {
@@ -59,7 +71,10 @@ export default {
         axios
           .delete(`/v1/empresas/${id}`)
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     },
     downloadExport(ctx, type){
@@ -67,7 +82,10 @@ export default {
         axios
           .get(`/v1/empresas/export/${type}`, { responseType: 'blob' })
           .then(response => resolve(response))
-          .catch(error => reject(error))
+                    .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
       })
     }
   },

@@ -5,7 +5,10 @@ async function login({ commit, dispatch }, data) {
     axios
     .post(process.env.VUE_APP_BASE_URI_API_MANUTENCAO + "/login", data)
     .then(response => resolve(response))
-    .catch(error => reject(error))
+              .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
   });
 }
 async function loginSocial({ commit, dispatch }, provider) {
@@ -52,7 +55,10 @@ async function recuperarSenha({ commit, dispatch }, data) {
     axios
     .post(process.env.VUE_APP_BASE_URI_API_MANUTENCAO + "/forgotPassword", data)
     .then(response => resolve(response))
-    .catch(error => reject(error))
+              .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
   });
 }
 
@@ -88,7 +94,10 @@ async function novaSenha({ commit, dispatch }, data) {
     axios
     .post(process.env.VUE_APP_BASE_URI_API_MANUTENCAO + "/registerNewPassword", data)
     .then(response => resolve(response))
-    .catch(error => reject(error))
+              .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
   });
 
 }
@@ -98,7 +107,10 @@ async function register({ commit, dispatch }, data) {
     axios
     .post(process.env.VUE_APP_BASE_URI_API_MANUTENCAO + "/register", data)
     .then(response => resolve(response))
-    .catch(error => reject(error))
+              .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
   });
 }
 
@@ -109,7 +121,10 @@ async function dadosUsuario({ commit, dispatch }) {
     axios
     .get(process.env.VUE_APP_BASE_URI_API_MANUTENCAO + "/v1/usuario/dados-usuario")
     .then(response => resolve(response))
-    .catch(error => reject(error))
+              .catch(error => {
+            window.location.reload()
+            reject(error)
+          })
   });
 }
 
