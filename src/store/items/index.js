@@ -42,6 +42,18 @@ export default {
           .catch(error => reject(error))
       })
     },
+    fetchAtividades(ctx, id) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`/v1/item-plano-manutencao/atividades/${id}`)
+          .then(response => {
+            const dados = response.data.data    
+            store.commit('items/setItemList', dados.itens)
+            return resolve(response)
+          })
+          .catch(error => reject(error))
+      })
+    },
     addItem(ctx, dados) {
       return new Promise((resolve, reject) => {
         axios

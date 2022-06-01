@@ -126,7 +126,7 @@
               data-vv-as="id_sistema"
             ></v-select>
           </v-col>
-          
+
           <v-col cols="12" md="6">
             <v-select
               :items="itemsEquipamentos"
@@ -518,7 +518,7 @@ export default {
   },
   created() {
     this.id_plano = this.$route.params.id;
-    this.$store.dispatch("items/fetchItems");
+    this.$store.dispatch("items/fetchAtividades", this.id_plano);
     this.$store
       .dispatch("providers/fetchItems")
       .then((resp) => (this.itemsFornecedores = resp.data.data.fornecedor));
