@@ -70,7 +70,7 @@ export default {
   data: () => ({
     data: {
       payload: "",
-      provider: ""
+      provider: "",
     },
     isPasswordVisible: false,
     email: "",
@@ -95,43 +95,40 @@ export default {
             localStorage.setItem("accessToken", token);
             auth_success.value = true;
 
-            if (userData !== undefined && userToken !== undefined)
-            {
-              store.dispatch("auth/dadosUsuario").then((result) => {
-                if (result.data.data.user) {
-                  const user = result.data.data.user;
+            store.dispatch("auth/dadosUsuario").then((result) => {
+              if (result.data.data.user) {
+                const user = result.data.data.user;
 
-                  const { ability: userAbility } = user;
+                const { ability: userAbility } = user;
 
-                  // Set user ability
-                  // ? https://casl.js.org/v5/en/guide/intro#update-rules
-                  vm.$ability.update(userAbility);
+                // Set user ability
+                // ? https://casl.js.org/v5/en/guide/intro#update-rules
+                vm.$ability.update(userAbility);
 
-                  // Set user's ability in localStorage for Access Control
-                  localStorage.setItem(
-                    "userAbility",
-                    JSON.stringify(userAbility)
-                  );
+                // Set user's ability in localStorage for Access Control
+                localStorage.setItem(
+                  "userAbility",
+                  JSON.stringify(userAbility)
+                );
 
-                  // We will store `userAbility` in localStorage separate from userData
-                  // Hence, we are just removing it from user object
-                  delete user.ability;
+                // We will store `userAbility` in localStorage separate from userData
+                // Hence, we are just removing it from user object
+                delete user.ability;
 
-                  // Set user's data in localStorage for UI/Other purpose
-                  localStorage.setItem("userData", JSON.stringify(user));
-                  localStorage.setItem("user", JSON.stringify(user));
-                  localStorage.setItem("role", user.role);
+                // Set user's data in localStorage for UI/Other purpose
+                localStorage.setItem("userData", JSON.stringify(user));
+                localStorage.setItem("user", JSON.stringify(user));
+                localStorage.setItem("role", user.role);
 
-                  store.commit("auth/setUser", user);
-                  store.commit("auth/setUsuario", user);
-                  store.commit("auth/auth_status", "LOGADO");
-                  store.commit("auth/setRole", user.role);
-                  loadingBtnLogin.value = false;
+                store.commit("auth/setUser", user);
+                store.commit("auth/setUsuario", user);
+                store.commit("auth/auth_status", "LOGADO");
+                store.commit("auth/setRole", user.role);
+                loadingBtnLogin.value = false;
 
-                  router.push("/");
-                }
-              });
-            }
+                this.$router.push("/");
+              }
+            });
           }
         })
         .catch(() => {
@@ -141,7 +138,7 @@ export default {
             text: "Oops, dados vencidos, você será redirecionado para tela login.",
           });
           setTimeout(() => {
-            this.$router.push('/login')
+            this.$router.push("/login");
           }, 3000);
         });
     },
@@ -150,7 +147,7 @@ export default {
     this.data.payload = this.$route.query.code;
     this.data.provider = this.$route.path.split("/")[2];
     this.loginUser();
-  }
+  },
 };
 </script>
 
