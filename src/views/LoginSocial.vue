@@ -92,27 +92,8 @@ export default {
             if (userData !== undefined && userToken !== undefined)
             {
               store.dispatch("auth/dadosUsuario");
+              this.$router.push('/')
             }
-          }
-          else if (resp.data.data.codigo = 10) {
-            this.$store.dispatch("module/openSnackBar", {
-              color: "primary",
-              timeout: 10000,
-              text: resp.data.data.menssagem,
-            });
-            setTimeout(() => {
-              this.$router.push('/login')
-            }, 3000);
-          }
-          else if (resp.data.data.codigo = 1) {
-            this.$store.dispatch("module/openSnackBar", {
-              color: "primary",
-              timeout: 10000,
-              text: resp.data.data.menssagem,
-            });
-            setTimeout(() => {
-              this.$router.push('/login')
-            }, 3000);
           }
         })
         .catch(() => {

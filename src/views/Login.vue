@@ -191,7 +191,7 @@ export default {
             axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
             localStorage.setItem("accessToken", token);
             auth_success.value = true;
-            return response;
+            //return response;
 
           } else {
             auth_success.value = false;
@@ -200,7 +200,7 @@ export default {
               timeout: 3000,
               text: "Oops, e-mail e senhas informados não encontrados."
             });
-            return response;
+            //return response;
           }
           /**/
         })
@@ -235,7 +235,7 @@ export default {
                   store.commit("auth/setUsuario", user);
                   store.commit("auth/auth_status", "LOGADO");
                   store.commit("auth/setRole", user.role);
-                  
+                  loadingBtnLogin.value = false;
 
                   router.push("/");
                 }
@@ -249,7 +249,7 @@ export default {
           errorMessages.value = error.response.data.error;
         })
         .finally(() => {
-          loadingBtnLogin.value = false;
+          
         });
     };
     function validAction(param) {
