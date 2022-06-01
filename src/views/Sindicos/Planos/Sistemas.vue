@@ -273,7 +273,7 @@ export default {
               : "Erro ao atualizar item.";
           let data = this.editedItem;
           data._method = method;
-          data.id_empresa =  (this.role == "Administrador") ? data.id_empresa : this.usuario.id_empresa;        
+          data.id_empresa =  (this.role != "Administrador") ?  this.usuario.id_empresa : data.id_empresa;        
           data.url = url;
           this.loadingSalvarSistemas = false
           this.$store

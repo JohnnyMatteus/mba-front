@@ -333,7 +333,7 @@ export default {
     salvar() {
       this.$validator.validate("fornecedor.*").then((result) => {
         if (result) {
-          console.log(this.objetoEdicao)
+
           this.loadingControl.loadingExcluir = true;
           this.loadingControl.loadingSalvar = true;
           let url =
@@ -346,7 +346,7 @@ export default {
               ? "Erro ao salvar item."
               : "Erro ao atualizar item.";
           let data = this.objetoEdicao;          
-         // data.id_empresa =  (this.role == "Administrador") ? data.id_empresa : this.usuario.id_empresa;        
+          data.id_empresa =  (this.role != "Administrador") ?  this.usuario.id_empresa : data.id_empresa;        
           data._method = method;
           data.url = url;
           this.$store
