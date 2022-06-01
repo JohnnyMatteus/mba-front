@@ -63,6 +63,7 @@
 import themeConfig from "@themeConfig";
 import store from "@/store";
 import axios from "axios";
+import { AbilityBuilder, Ability } from '@casl/ability';
 
 export default {
   name: "LoginSocial",
@@ -87,34 +88,18 @@ export default {
         .dispatch("auth/loginUserCallback", this.data)
         .then((resp) => {
           if (resp.data.data.access_token) {
-            const userData = JSON.stringify(localStorage.getItem("user"));
+            /*const userData = JSON.stringify(localStorage.getItem("user"));*/
             const userToken = localStorage.getItem("accessToken");
             const token = resp.data.data.access_token;
-
+          
             axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
             localStorage.setItem("accessToken", token);
-            auth_success.value = true;
+            // auth_success.value = true;
 
             store.dispatch("auth/dadosUsuario").then((result) => {
               if (result.data.data.user) {
-                const user = result.data.data.user;
-
-                const { ability: userAbility } = user;
-
-                // Set user ability
-                // ? https://casl.js.org/v5/en/guide/intro#update-rules
-                vm.$ability.update(userAbility);
-
-                // Set user's ability in localStorage for Access Control
-                localStorage.setItem(
-                  "userAbility",
-                  JSON.stringify(userAbility)
-                );
-
-                // We will store `userAbility` in localStorage separate from userData
-                // Hence, we are just removing it from user object
-                delete user.ability;
-
+                const user = result.data.data.user;              
+                this.updateAbility(user);
                 // Set user's data in localStorage for UI/Other purpose
                 localStorage.setItem("userData", JSON.stringify(user));
                 localStorage.setItem("user", JSON.stringify(user));
@@ -123,25 +108,44 @@ export default {
                 store.commit("auth/setUser", user);
                 store.commit("auth/setUsuario", user);
                 store.commit("auth/auth_status", "LOGADO");
-                store.commit("auth/setRole", user.role);
-                loadingBtnLogin.value = false;
-
+                store.commit("auth/setRole", user.role);  
                 this.$router.push("/");
               }
             });
           }
         })
-        .catch(() => {
+        .catch((error) => {
+          console.log(error)
           this.$store.dispatch("module/openSnackBar", {
             color: "error",
             timeout: 10000,
             text: "Oops, dados vencidos, você será redirecionado para tela login.",
           });
-          setTimeout(() => {
+          /* setTimeout(() => {
             this.$router.push("/login");
-          }, 3000);
+          }, 3000);*/
         });
     },
+    updateAbility(user) {
+      const { can, rules } = new AbilityBuilder(Ability);
+
+      const { ability: userAbility } = user;
+      
+      // Set user ability
+      // ? https://casl.js.org/v5/en/guide/intro#update-rules
+      this.$ability.update(userAbility);
+
+      // Set user's ability in localStorage for Access Control
+      localStorage.setItem(
+        "userAbility",
+        JSON.stringify(userAbility)
+      );
+
+      // We will store `userAbility` in localStorage separate from userData
+      // Hence, we are just removing it from user object
+      delete user.ability;
+
+    }
   },
   created() {
     this.data.payload = this.$route.query.code;
