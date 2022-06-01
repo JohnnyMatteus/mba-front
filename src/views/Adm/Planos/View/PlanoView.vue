@@ -25,6 +25,9 @@
           no-data-text="Nenhum registro encontrado"
           mobile-breakpoint="0"
         >
+          <template #[`item.equipamento`]="{ item }">
+            <span>{{ item.sistema }}/{{ item.equipamento }}</span>
+          </template>
           <template #[`item.status`]="{ item }">
             <v-chip
               small
@@ -272,8 +275,8 @@ export default {
       dataTable: false,
     },
     headers: [
-      { text: "Nome", value: "nome", sortable: false, hide: "smAndDown" },
-      { text: "Equipamento", value: "equipamento" },
+      { text: "Descrição", value: "nome", sortable: false, hide: "smAndDown" },
+      { text: "Componentes", value: "equipamento" },
       { text: "Sistema", value: "sistema" },
       { text: "Periodicidade", value: "periodicidade" },
       { text: "Fornecedor", value: "fornecedor" },
@@ -285,7 +288,7 @@ export default {
         value: "uuid",
       },
       {
-        text: "Nome",
+        text: "Descrição",
         value: "nome",
       },
       {
