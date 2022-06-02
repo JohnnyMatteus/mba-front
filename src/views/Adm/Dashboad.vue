@@ -375,7 +375,7 @@ export default {
   
     const chartData2 = ref()
 
-    store.dispatch("empresas/").then((resp) => {
+    store.dispatch("empresas/fetchDataDashboad").then((resp) => {
       const dados = resp.data.data;
       statisticsData.value = dados.estatiscas;
       ratingsOptions.statistics = dados.totalizadores.usuarios;
